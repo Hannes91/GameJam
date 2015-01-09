@@ -104,6 +104,12 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
+        if (player.heal != 0) {
+            this.time = this.time + player.heal;
+            player.heal = 0;
+            timeLabel.setText("Time left: " + time);
+        }
+        
         Gdx.gl.glClearColor(0, 1, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         cam.position.x = player.getX() + 480 / 4;

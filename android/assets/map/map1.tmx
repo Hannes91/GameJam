@@ -2,15 +2,30 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="42" height="42" tilewidth="16" tileheight="16">
  <tileset firstgid="1" name="tileset1" tilewidth="16" tileheight="16">
   <image source="graphics/tileset1.png" width="64" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="heal" value=""/>
+   </properties>
+  </tile>
   <tile id="1">
    <properties>
     <property name="blocked" value=""/>
    </properties>
   </tile>
+  <tile id="3">
+   <properties>
+    <property name="small_heal" value=""/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="Kachelebene 1" width="42" height="42">
   <data encoding="base64" compression="zlib">
-   eJztmFEKwCAMQ4vz/mfeBcZ0xSyp5iN/Sp9JS8EWEa2ILnGZ05zKYnL2IpxMP794hOBE1Xfumpx/5v1Waxc/VYTiXN0vCE5ET5+euzm1pcI5mr0MZ2aeR3cQnCfnbk4+54q9V2G/O3dupjM1dvazMie6Fxh+Zt7k/xBzojXbO0/nPO8Yzgq6AVhjFB4=
+   eJztzrENACAMwLCq/P8zbwThwbt3ZvYRJ87Ts8zTs8zTs8zTs8zTs8zTs8zTs8zTs8zTs8zz7+cLLmIMFAk=
+  </data>
+ </layer>
+ <layer name="Objekte" width="42" height="42">
+  <data encoding="base64" compression="zlib">
+   eJzt18EKgCAUBVGD/v+bQ2qnRBjhHZsDLs37fFlYiqQE+zXSETJWCTkTMsxCqp1y9qrRnJT6pLdmneeRNRNybg/nUL4hlJxq2buT+6CvUN6t1XIS6iH953so2f+c8+6Z3m/VY3+1ugNJ8QCG
   </data>
  </layer>
 </map>

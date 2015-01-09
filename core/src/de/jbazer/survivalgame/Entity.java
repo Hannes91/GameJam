@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Entity {
 
-    /** TAG for logging.*/
+    /** TAG for logging. */
     private static final String LOG = Entity.class.getSimpleName();
     protected int width;
     protected int height;
@@ -23,12 +23,16 @@ public class Entity {
     protected boolean right;
     protected int moveSpeed;
     protected TiledMapTileLayer layer;
+    protected TiledMapTileLayer objects;
     protected int tileSize;
     protected Animation animation;
+    /** Is set when player gets extra time through powerUps etc. */
+    public int heal;
 
     public Entity(TiledMap map) {
         super();
         layer = (TiledMapTileLayer) map.getLayers().get(0);
+        objects = (TiledMapTileLayer) map.getLayers().get("Objekte");
         tileSize = map.getProperties().get("tilewidth", Integer.class);
         animation = new Animation();
     }
@@ -102,6 +106,19 @@ public class Entity {
             } else {
                 xdest = x + tileSize;
             }
+        }
+        // If is an collectable
+        if (objects != null && objects.getCell(coltile, rowtile) != null) {
+            // if is a heal, heal stronger
+            if (objects.getCell(coltile, rowtile).getTile().getProperties()
+                    .containsKey("heal")) {
+                heal += 10;
+            }
+            if (objects.getCell(coltile, rowtile).getTile().getProperties()
+                    .containsKey("small_heal")) {
+                heal += 2;
+            }
+            objects.setCell(coltile, rowtile, null);
         }
         return true;
     }
