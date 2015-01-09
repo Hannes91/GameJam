@@ -15,6 +15,16 @@
     <property name="heal" value=""/>
    </properties>
   </tile>
+  <tile id="1">
+   <properties>
+    <property name="decrease" value=""/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="shoe" value=""/>
+   </properties>
+  </tile>
   <tile id="3">
    <properties>
     <property name="small_heal" value=""/>
@@ -23,12 +33,12 @@
  </tileset>
  <layer name="Kachelebene 1" width="42" height="42">
   <data encoding="base64" compression="zlib">
-   eJztzrENACAMwLCq/P8zbwThwbt3ZvYRJ87Ts8zTs8zTs8zTs8zTs8zTs8zTs8zTs8zTs8zz7+cLLmIMFAk=
+   eJzt0TEOACAMw8CqLPz/xXyiIEd48H5Kuqo6pAVPp87JdogzZc/Xzun/ft+Tkk6d5HTqJKdTJzmdOsnp1ElOp05yOnWS03nHmdABSOMUEw==
   </data>
  </layer>
  <layer name="Kachelebene 2" width="42" height="42">
   <data encoding="base64" compression="zlib">
-   eJzt1bsOABEQheFp1nr/JxaFzsZOIubi/0qN4cQhAsCj13qAwKr1AEJ+VXzkgLU/OZGlL5HyiDQrvpXJ2ol/7jmwx8rt/7mV3h2au6drAJ1Zr8OHjH2m7fQMbjvvbhnfAXgXwNAAn8sAqg==
+   eJzt2b0OABAMhVGLn/d/YrsoS6VX851FLHJp00Up/+jRAQ6UswFAhBEdAG6opRbqgZfaZa+kLasyj4zV4YwTpfe05pzVn8xFAFlknGcZ74S36BlAj/Lfh3K2nQkdAACY
   </data>
  </layer>
 </map>

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 public class Entity {
 
@@ -128,30 +129,52 @@ public class Entity {
             // if is a heal, heal stronger
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
                     .containsKey("heal")) {
-                heal += 10;
-                createNewHeal();
+                heal += 5;
+                createNew("goal");
+                createNew("flower");
+                createNew("cross");
+                createNew("cross");
             }
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
                     .containsKey("small_heal")) {
-                heal += 2;
+                heal += 1;
+            }
+            if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                    .containsKey("shoe")) {
+                this.moveSpeed++;
+            }
+            if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                    .containsKey("decrease")) {
+                System.out.println("trigger");
+                heal -= 3;
             }
             l2.setCell(coltile, rowtile, null);
         }
         return true;
     }
 
-    private void createNewHeal() {
-        System.out.println(l1.getHeight() + ", " + l1.getWidth());
-        int ranX = (int) (Math.random() * l1.getWidth());
-        int ranY = (int) (Math.random() * l1.getHeight());
-        l1.getCell(2, 20).setTile(tiles.get("rock"));
-        l1.getCell(3, 20).setTile(tiles.get("grey"));
-        l1.getCell(4, 20).setTile(tiles.get("rock"));
-        l1.getCell(5, 20).setTile(tiles.get("flower"));
-        l1.getCell(6, 20).setTile(tiles.get("shoe"));
-        l1.getCell(7, 20).setTile(tiles.get("goal"));
-        l1.getCell(8, 20).setTile(tiles.get("cross"));
-        l1.getCell(9, 20).setTile(tiles.get("flower"));
+    private void createNew(String type) {
+        int ranX, ranY;
+        if (mapFull()) {
+            // TODO: check if map is full, else you get nullPointer in the Case
+            // some gets all Fields full
+        }
+        do {
+            ranX = (int) (Math.random() * l1.getWidth());
+            ranY = (int) (Math.random() * l1.getHeight());
+        } while (l1.getCell(ranX, ranY).getTile().getProperties()
+                .containsKey("blocked")
+                || l2.getCell(ranX, ranY) != null);
+        System.out.println("Place new Goal on " + ranX + ", " + ranY);
+        Cell cell = new Cell();
+        cell.setTile(tiles.get(type));
+        l2.setCell(ranX, ranY, cell);
+        ;
+    }
+
+    private boolean mapFull() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     public int getX() {

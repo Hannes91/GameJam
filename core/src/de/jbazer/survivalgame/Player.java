@@ -14,7 +14,7 @@ public class Player extends Entity {
         super(map);
         width = 16;
         height = 16;
-        moveSpeed = 5;
+        moveSpeed = 2;
         Texture tex = MySurvivalGame.res.getTexture("player");
         spritesDown = new TextureRegion[4];
         for (int i = 0; i < spritesDown.length; i++) {
