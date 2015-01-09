@@ -4,25 +4,26 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
-public class Player extends Entity{
+public class Player extends Entity {
 
-    /** TAG for logging.*/
+    /** TAG for logging. */
     private static final String LOG = Player.class.getSimpleName();
     private TextureRegion[] spritesDown, spritesRight, spritesUp, spritesLeft;
-    
+
     public Player(TiledMap map) {
         super(map);
         width = 16;
         height = 16;
         moveSpeed = 5;
         Texture tex = MySurvivalGame.res.getTexture("player");
-        spritesDown = new TextureRegion[1];
+        spritesDown = new TextureRegion[4];
         for (int i = 0; i < spritesDown.length; i++) {
             spritesDown[i] = new TextureRegion(tex, i * width, 0, width, height);
         }
         spritesRight = new TextureRegion[1];
         for (int i = 0; i < spritesRight.length; i++) {
-            spritesRight[i] = new TextureRegion(tex, i * width, 16, width, height);
+            spritesRight[i] = new TextureRegion(tex, i * width, 16, width,
+                    height);
         }
         spritesUp = new TextureRegion[1];
         for (int i = 0; i < spritesUp.length; i++) {
@@ -30,7 +31,8 @@ public class Player extends Entity{
         }
         spritesLeft = new TextureRegion[1];
         for (int i = 0; i < spritesLeft.length; i++) {
-            spritesLeft[i] = new TextureRegion(tex, i * width, 48, width, height);
+            spritesLeft[i] = new TextureRegion(tex, i * width, 48, width,
+                    height);
         }
         animation.setFrames(spritesDown, 1 / 5f);
     }
@@ -75,6 +77,5 @@ public class Player extends Entity{
         // TODO Auto-generated method stub
         super.setRight();
     }
-    
 
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Animation {
 
-    /** TAG for logging.*/
+    /** TAG for logging. */
     private static final String LOG = Animation.class.getSimpleName();
     private TextureRegion[] frames;
     private float time;
@@ -34,6 +34,7 @@ public class Animation {
             }
         }
     }
+
     public TextureRegion getFrames() {
         return frames[CurrentFrame];
     }
