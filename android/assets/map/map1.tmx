@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="42" height="42" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tileset1" tilewidth="16" tileheight="16">
+  <image source="graphics/tileset1.png" width="64" height="16"/>
+  <tile id="1">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Kachelebene 1" width="42" height="42">
+  <data encoding="base64" compression="zlib">
+   eJztmFEKwCAMQ4vz/mfeBcZ0xSyp5iN/Sp9JS8EWEa2ILnGZ05zKYnL2IpxMP794hOBE1Xfumpx/5v1Waxc/VYTiXN0vCE5ET5+euzm1pcI5mr0MZ2aeR3cQnCfnbk4+54q9V2G/O3dupjM1dvazMie6Fxh+Zt7k/xBzojXbO0/nPO8Yzgq6AVhjFB4=
+  </data>
+ </layer>
+</map>
