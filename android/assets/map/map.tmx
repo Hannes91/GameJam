@@ -2,14 +2,17 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="42" height="42" tilewidth="16" tileheight="16">
  <tileset firstgid="1" name="tileset1" tilewidth="16" tileheight="16">
   <image source="graphics/tileset1.png" width="64" height="16"/>
-  <tile id="0">
-   <properties>
-    <property name="heal" value=""/>
-   </properties>
-  </tile>
   <tile id="1">
    <properties>
     <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="5" name="objects" tilewidth="16" tileheight="16">
+  <image source="objects.png" trans="ffffff" width="64" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="heal" value=""/>
    </properties>
   </tile>
   <tile id="3">
@@ -23,9 +26,9 @@
    eJztzrENACAMwLCq/P8zbwThwbt3ZvYRJ87Ts8zTs8zTs8zTs8zTs8zTs8zTs8zTs8zTs8zz7+cLLmIMFAk=
   </data>
  </layer>
- <layer name="Objekte" width="42" height="42">
+ <layer name="Kachelebene 2" width="42" height="42">
   <data encoding="base64" compression="zlib">
-   eJzt18EKgCAUBVGD/v+bQ2qnRBjhHZsDLs37fFlYiqQE+zXSETJWCTkTMsxCqp1y9qrRnJT6pLdmneeRNRNybg/nUL4hlJxq2buT+6CvUN6t1XIS6iH953so2f+c8+6Z3m/VY3+1ugNJ8QCG
+   eJzt1bsOABEQheFp1nr/JxaFzsZOIubi/0qN4cQhAsCj13qAwKr1AEJ+VXzkgLU/OZGlL5HyiDQrvpXJ2ol/7jmwx8rt/7mV3h2au6drAJ1Zr8OHjH2m7fQMbjvvbhnfAXgXwNAAn8sAqg==
   </data>
  </layer>
 </map>

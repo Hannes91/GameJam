@@ -46,7 +46,7 @@ public class GameScreen implements Screen, InputProcessor {
         font = new BitmapFont();
         this.game = game;
         cam = this.game.getCamera();
-        map = new TmxMapLoader().load("map/map1.tmx");
+        map = new TmxMapLoader().load("map/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         tilemapwidth = map.getProperties().get("width", Integer.class);
         tilemapHeight = map.getProperties().get("height", Integer.class);
