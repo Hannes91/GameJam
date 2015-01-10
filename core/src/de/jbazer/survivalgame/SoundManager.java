@@ -42,9 +42,7 @@ public class SoundManager {
 
     public void playMiau() {
         int ran = (int) (Math.random() * 5);
-        System.out.println("Ran: " + ran);
         String name = "miau" + (ran + 1);
-        System.out.println("Play " + name);
         sounds.get(name).play();
     }
 

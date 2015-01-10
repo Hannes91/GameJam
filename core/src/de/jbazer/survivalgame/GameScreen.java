@@ -68,8 +68,8 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     private void startMouseTimer() {
-        int minWait = 2;
-        int maxWait = 5;
+        int minWait = 3;
+        int maxWait = 6;
         System.out.println("new mouse timer");
         final int ran = (int) (Math.random() * maxWait + minWait);
         new Thread(new Runnable() {
@@ -196,8 +196,13 @@ public class GameScreen implements Screen, InputProcessor {
             player.heal = 0;
             timeLabel.setText("Time left: " + time);
         }
-        if (mouse != null && player.getX() == mouse.getX()
-                && player.getY() == mouse.getY()) {
+        if (mouse != null)
+            System.out.println("Check Mouse catch. PlayerPos: " + player.getX()
+                    + ", " + player.getY() + "  Mouse: " + mouse.getX() + ", "
+                    + mouse.getY());
+        if (mouse != null
+                && (int) player.getX() / 32 == (int) mouse.getX() / 32
+                && (int) player.getY() / 32 == (int) mouse.getY() / 32) {
             // Mouse catched
             System.out.println("MOUSE CATCHED");
             mouse = null;

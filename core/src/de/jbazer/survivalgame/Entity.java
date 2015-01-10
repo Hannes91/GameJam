@@ -177,10 +177,16 @@ public class Entity {
                 xdest = x + tileSize;
             }
         }
+        int nextX = coltile;
+        int nextY = rowtile;
+        if (up) nextY++;
+        if (down) nextY--;
+        if (left) nextX--;
+        if (right) nextX++;
         // If is an collectable
-        if (l2 != null && l2.getCell(coltile, rowtile) != null) {
+        if (l2 != null && l2.getCell(nextX, nextY) != null) {
             // if is a heal, heal stronger
-            if (l2.getCell(coltile, rowtile).getTile().getProperties()
+            if (l2.getCell(nextX, nextY).getTile().getProperties()
                     .containsKey("heal")) {
                 if (isP) {
                     heal += 6;
@@ -193,28 +199,28 @@ public class Entity {
             }
             // Only when this is the player and not a mouse
             if (isP) {
-                if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                if (l2.getCell(nextX, nextY).getTile().getProperties()
                         .containsKey("small_heal")) {
                     SoundManager.getInstance().playSound("pickup");
                     heal += 1;
                 }
-                if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                if (l2.getCell(nextX, nextY).getTile().getProperties()
                         .containsKey("shoe")) {
                     SoundManager.getInstance().playSound("pickup");
                     this.moveSpeed++;
                 }
-                if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                if (l2.getCell(nextX, nextY).getTile().getProperties()
                         .containsKey("decrease")) {
                     SoundManager.getInstance().playSound("dec");
                     heal -= 3;
                 }
-                if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                if (l2.getCell(nextX, nextY).getTile().getProperties()
                         .containsKey("die")) {
                     SoundManager.getInstance().playSound("dec");
                     startDying();
                 }
             }
-            l2.setCell(coltile, rowtile, null);
+            l2.setCell(nextX, nextY, null);
         }
         return true;
     }
