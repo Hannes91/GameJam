@@ -9,12 +9,17 @@ public class Mouse extends Entity {
     /** TAG for logging. */
     private static final String LOG = Mouse.class.getSimpleName();
     private TextureRegion[] spritesDown, spritesRight, spritesUp, spritesLeft;
+    public static final int UP = 0;
+    public static final int DOWN = 1;
+    public static final int LEFT = 2;
+    public static final int RIGHT = 3;
+    private int direction;
 
     public Mouse(TiledMap map) {
         super(map);
         width = 32;
         height = 32;
-        moveSpeed = 3;
+        moveSpeed = (int) Math.random() * 10 + 5;
         Texture tex = MySurvivalGame.res.getTexture("mouse");
         spritesDown = new TextureRegion[1];
         for (int i = 0; i < spritesDown.length; i++) {
@@ -40,16 +45,20 @@ public class Mouse extends Entity {
     @Override
     public void update(float dt) {
         super.update(dt);
-        if (right) {
+        if (this.direction == this.RIGHT) {
+            this.setRight();
             animation.setFrames(spritesRight, 1 / 5f);
         }
-        if (down) {
+        if (this.direction == this.DOWN) {
+            this.setDown();
             animation.setFrames(spritesDown, 1 / 5f);
         }
-        if (up) {
+        if (this.direction == this.UP) {
+            this.setUp();
             animation.setFrames(spritesUp, 1 / 5f);
         }
-        if (left) {
+        if (this.direction == this.LEFT) {
+            this.setLeft();
             animation.setFrames(spritesLeft, 1 / 5f);
         }
     }
@@ -76,6 +85,26 @@ public class Mouse extends Entity {
     public void setRight() {
         // TODO Auto-generated method stub
         super.setRight();
+    }
+
+    public void setDirection(int dir) {
+        this.direction = dir;
+        switch (dir) {
+            case DOWN:
+                this.down = true;
+                break;
+            case LEFT:
+                this.left = true;
+                break;
+            case RIGHT:
+                this.right = true;
+                break;
+            case UP:
+                this.up = true;
+                break;
+            default:
+                break;
+        }
     }
 
 }

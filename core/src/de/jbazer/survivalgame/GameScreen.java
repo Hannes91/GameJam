@@ -58,37 +58,62 @@ public class GameScreen implements Screen, InputProcessor {
         tilemapHeight = map.getProperties().get("height", Integer.class);
         batch = new SpriteBatch();
         player = new Player(map);
-        createNewMouse();
         player.setTilePostion(1, 25);
         this.createUI();
         this.startTimer();
         Gdx.input.setInputProcessor(this);
+        this.startMouseTimer();
+        player.initStuff();
+        // createNewMouse();
+    }
+
+    private void startMouseTimer() {
+        int minWait = 2;
+        int maxWait = 5;
+        System.out.println("new mouse timer");
+        final int ran = (int) (Math.random() * maxWait + minWait);
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(1000 * ran);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                createNewMouse();
+            }
+        }).start();
     }
 
     private void createNewMouse() {
         mouse = new Mouse(map);
         int ran = (int) (Math.random() * 42);
-        System.out.println("random number");
         boolean horizontal = ran % 2 == 0;
         boolean fromTop = (int) (Math.random() * 2) % 2 == 0;
-        System.out.println("random. " + horizontal + fromTop);
         Cell cell = new Cell();
         // cell.setTile(tiles.get("mouse"));
         // random rand position
         if (horizontal) {
             if (fromTop) {
                 mouse.setTilePostion(2, ran);
+                mouse.setDirection(Mouse.RIGHT);
+                System.out.println("mouse ro right");
                 // l2.setCell(2, ran, cell);
             } else {
                 mouse.setTilePostion(39, ran);
+                mouse.setDirection(Mouse.LEFT);
+                System.out.println("mouse ro left");
                 // l2.setCell(40, ran, cell);
             }
         } else {
             if (fromTop) {
                 mouse.setTilePostion(ran, 2);
+                mouse.setDirection(Mouse.UP);
+                System.out.println("mouse ro up");
                 // l2.setCell(ran, 2, cell);
             } else {
                 mouse.setTilePostion(ran, 39);
+                mouse.setDirection(Mouse.DOWN);
+                System.out.println("mouse ro down");
                 // l2.setCell(ran, 40, cell);
             }
         }
@@ -143,12 +168,12 @@ public class GameScreen implements Screen, InputProcessor {
             if (score > MySurvivalGame.getInstance().getHighscore()) {
                 MySurvivalGame.getInstance().setHighscore(score);
                 this.endLabel = new Label(
-                        "   Game Over\nClick for restart\n      Score: " + score
-                                + "\nNew Highscore", skin);
+                        "   Game Over\nClick for restart\n      Score: "
+                                + score + "\nNew Highscore", skin);
             } else {
                 this.endLabel = new Label(
-                        "   Game Over\nClick for restart\n      Score: " + score
-                                + "\nCurrent Highscore: "
+                        "   Game Over\nClick for restart\n      Score: "
+                                + score + "\nCurrent Highscore: "
                                 + MySurvivalGame.getInstance().getHighscore(),
                         skin);
             }
@@ -171,7 +196,18 @@ public class GameScreen implements Screen, InputProcessor {
             player.heal = 0;
             timeLabel.setText("Time left: " + time);
         }
-
+        if (mouse != null && player.getX() == mouse.getX()
+                && player.getY() == mouse.getY()) {
+            // Mouse catched
+            System.out.println("MOUSE CATCHED");
+            mouse = null;
+            startMouseTimer();
+            player.heal += 10;
+        }
+        if (mouse != null && mouse.stopped) {
+            mouse = null;
+            startMouseTimer();
+        }
         Gdx.gl.glClearColor(0, 1, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         cam.position.x = player.getX() + 960 / 4;
@@ -193,9 +229,11 @@ public class GameScreen implements Screen, InputProcessor {
         renderer.setView(cam);
         renderer.render();
         player.update(delta);
-        mouse.update(delta);
         player.draw(batch);
-        mouse.draw(batch);
+        if (mouse != null) {
+            mouse.update(delta);
+            mouse.draw(batch);
+        }
         if (Gdx.input.isKeyPressed(Keys.UP)) {
             player.setUp();
         }

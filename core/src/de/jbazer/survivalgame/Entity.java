@@ -22,6 +22,7 @@ public class Entity {
     protected int rowtile;
     protected int coltile;
     protected boolean moving;
+    protected boolean stopped;
     protected boolean up;
     protected boolean down;
     protected boolean left;
@@ -38,6 +39,7 @@ public class Entity {
     public int heal;
     private boolean mouseAlive;
     protected boolean tOn;
+    private boolean isP;
 
     public Entity(TiledMap map) {
         super();
@@ -56,7 +58,16 @@ public class Entity {
         tiles.put("shoe", map.getTileSets().getTile(7));
         tiles.put("flower", map.getTileSets().getTile(8));
         tiles.put("antifreeze", map.getTileSets().getTile(9));
-        placeObstacleRandom();
+        if (this.equals(Mouse.class)) {
+            System.out.println("is Mouse");
+        }
+    }
+
+    /**
+     * Shall only be called when Entity is the Player.
+     */
+    public void initStuff() {
+        this.isP = true;
         placeObstacleRandom();
         placeObstacleRandom();
         placeObstacleRandom();
@@ -133,6 +144,7 @@ public class Entity {
         if (up) {
             if (l1.getCell(coltile, rowtile + 1).getTile().getProperties()
                     .containsKey("blocked")) {
+                this.stopped = true;
                 return false;
             } else {
                 ydest = y + tileSize;
@@ -141,6 +153,7 @@ public class Entity {
         if (down) {
             if (l1.getCell(coltile, rowtile - 1).getTile().getProperties()
                     .containsKey("blocked")) {
+                this.stopped = true;
                 return false;
             } else {
                 ydest = y - tileSize;
@@ -149,6 +162,7 @@ public class Entity {
         if (left) {
             if (l1.getCell(coltile - 1, rowtile).getTile().getProperties()
                     .containsKey("blocked")) {
+                this.stopped = true;
                 return false;
             } else {
                 xdest = x - tileSize;
@@ -157,6 +171,7 @@ public class Entity {
         if (right) {
             if (l1.getCell(coltile + 1, rowtile).getTile().getProperties()
                     .containsKey("blocked")) {
+                this.stopped = true;
                 return false;
             } else {
                 xdest = x + tileSize;
@@ -167,30 +182,35 @@ public class Entity {
             // if is a heal, heal stronger
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
                     .containsKey("heal")) {
-                heal += 6;
-                SoundManager.getInstance().playMiau();
-                // MySurvivalGame.getInstance().pickup();
+                if (isP) {
+                    heal += 6;
+                    SoundManager.getInstance().playMiau();
+                    // MySurvivalGame.getInstance().pickup();
+                }
                 createNew("goal");
                 createNew("flower");
                 createNew("cross");
             }
-            if (l2.getCell(coltile, rowtile).getTile().getProperties()
-                    .containsKey("small_heal")) {
-                SoundManager.getInstance().playPickUp();
-                heal += 1;
-            }
-            if (l2.getCell(coltile, rowtile).getTile().getProperties()
-                    .containsKey("shoe")) {
-                SoundManager.getInstance().playPickUp();
-                this.moveSpeed++;
-            }
-            if (l2.getCell(coltile, rowtile).getTile().getProperties()
-                    .containsKey("decrease")) {
-                heal -= 3;
-            }
-            if (l2.getCell(coltile, rowtile).getTile().getProperties()
-                    .containsKey("die")) {
-                startDying();
+            // Only when this is the player and not a mouse
+            if (isP) {
+                if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                        .containsKey("small_heal")) {
+                    SoundManager.getInstance().playPickUp();
+                    heal += 1;
+                }
+                if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                        .containsKey("shoe")) {
+                    SoundManager.getInstance().playPickUp();
+                    this.moveSpeed++;
+                }
+                if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                        .containsKey("decrease")) {
+                    heal -= 3;
+                }
+                if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                        .containsKey("die")) {
+                    startDying();
+                }
             }
             l2.setCell(coltile, rowtile, null);
         }
