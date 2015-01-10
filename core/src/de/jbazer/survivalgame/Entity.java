@@ -195,20 +195,22 @@ public class Entity {
             if (isP) {
                 if (l2.getCell(coltile, rowtile).getTile().getProperties()
                         .containsKey("small_heal")) {
-                    SoundManager.getInstance().playPickUp();
+                    SoundManager.getInstance().playSound("pickup");
                     heal += 1;
                 }
                 if (l2.getCell(coltile, rowtile).getTile().getProperties()
                         .containsKey("shoe")) {
-                    SoundManager.getInstance().playPickUp();
+                    SoundManager.getInstance().playSound("pickup");
                     this.moveSpeed++;
                 }
                 if (l2.getCell(coltile, rowtile).getTile().getProperties()
                         .containsKey("decrease")) {
+                    SoundManager.getInstance().playSound("dec");
                     heal -= 3;
                 }
                 if (l2.getCell(coltile, rowtile).getTile().getProperties()
                         .containsKey("die")) {
+                    SoundManager.getInstance().playSound("dec");
                     startDying();
                 }
             }
