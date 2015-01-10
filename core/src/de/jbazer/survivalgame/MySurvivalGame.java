@@ -28,6 +28,7 @@ public class MySurvivalGame extends Game {
         camera.setToOrtho(false, 960, 640);
         res = new ResourceManager();
         res.loadImg("Sprites/catSprite.png", "player");
+        res.loadImg("Sprites/mouseSprite.png", "mouse");
         setScreen(new GameScreen(this));
         batch = new SpriteBatch();
         font = new BitmapFont();

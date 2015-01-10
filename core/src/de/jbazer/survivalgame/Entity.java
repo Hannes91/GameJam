@@ -36,6 +36,7 @@ public class Entity {
     private ArrayList<TiledMapTile> tilesObjects;
     /** Is set when player gets extra time through powerUps etc. */
     public int heal;
+    private boolean mouseAlive;
 
     public Entity(TiledMap map) {
         super();
@@ -53,6 +54,7 @@ public class Entity {
         tiles.put("cross", map.getTileSets().getTile(6));
         tiles.put("shoe", map.getTileSets().getTile(7));
         tiles.put("flower", map.getTileSets().getTile(8));
+        tiles.put("mouse", map.getTileSets().getTile(9));
         placeObstacleRandom();
         placeObstacleRandom();
         placeObstacleRandom();
@@ -165,7 +167,7 @@ public class Entity {
                     .containsKey("heal")) {
                 heal += 6;
                 SoundManager.getInstance().pickup();
-//                MySurvivalGame.getInstance().pickup();
+                // MySurvivalGame.getInstance().pickup();
                 createNew("goal");
                 createNew("flower");
                 createNew("cross");
@@ -186,6 +188,31 @@ public class Entity {
             l2.setCell(coltile, rowtile, null);
         }
         return true;
+    }
+
+    public void mouse() {
+        if (!mouseAlive) {
+            mouseAlive = true;
+            int ran = (int) Math.random() * l1.getWidth();
+            boolean horizontal = ran % 2 == 0;
+            boolean fromTop = (int) Math.random() * 2 % 2 == 0;
+            Cell cell = new Cell();
+            cell.setTile(tiles.get("mouse"));
+            // random rand position
+            if (horizontal) {
+                if (fromTop) {
+                    l2.setCell(2, ran, cell);
+                } else {
+                    l2.setCell(40, ran, cell);
+                }
+            } else {
+                if (fromTop) {
+                    l2.setCell(ran, 2, cell);
+                } else {
+                    l2.setCell(ran, 40, cell);
+                }
+            }
+        }
     }
 
     public void createNew(String type) {

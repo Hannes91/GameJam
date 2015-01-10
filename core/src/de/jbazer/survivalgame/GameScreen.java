@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -39,6 +40,7 @@ public class GameScreen implements Screen, InputProcessor {
     protected int score;
     private int highscore;
     private boolean newHighscore;
+    private Mouse mouse;
     private static final int GAME_RUNNING = 0;
     private static final int GAME_OVER = 1;
 
@@ -56,10 +58,40 @@ public class GameScreen implements Screen, InputProcessor {
         tilemapHeight = map.getProperties().get("height", Integer.class);
         batch = new SpriteBatch();
         player = new Player(map);
+        createNewMouse();
         player.setTilePostion(1, 25);
         this.createUI();
         this.startTimer();
         Gdx.input.setInputProcessor(this);
+    }
+
+    private void createNewMouse() {
+        mouse = new Mouse(map);
+        int ran = (int) (Math.random() * 42);
+        System.out.println("random number");
+        boolean horizontal = ran % 2 == 0;
+        boolean fromTop = (int) (Math.random() * 2) % 2 == 0;
+        System.out.println("random. " + horizontal + fromTop);
+        Cell cell = new Cell();
+//        cell.setTile(tiles.get("mouse"));
+        // random rand position
+        if (horizontal) {
+            if (fromTop) {
+                mouse.setTilePostion(2, ran);
+//                l2.setCell(2, ran, cell);
+            } else {
+                mouse.setTilePostion(39, ran);
+//                l2.setCell(40, ran, cell);
+            }
+        } else {
+            if (fromTop) {
+                mouse.setTilePostion(ran, 2);
+//                l2.setCell(ran, 2, cell);
+            } else {
+                mouse.setTilePostion(ran, 39);
+//                l2.setCell(ran, 40, cell);
+            }
+        }
     }
 
     private void createUI() {
@@ -91,6 +123,9 @@ public class GameScreen implements Screen, InputProcessor {
                         time = time - 1;
                         score++;
                         if (time % 2 == 0 || score > 60) {
+                            player.createNew("cross");
+                        }
+                        if (score > 120) {
                             player.createNew("cross");
                         }
                         timeLabel.setText("Time left: " + time);
@@ -147,7 +182,9 @@ public class GameScreen implements Screen, InputProcessor {
         renderer.setView(cam);
         renderer.render();
         player.update(delta);
+        mouse.update(delta);
         player.draw(batch);
+        mouse.draw(batch);
         if (Gdx.input.isKeyPressed(Keys.UP)) {
             player.setUp();
         }
