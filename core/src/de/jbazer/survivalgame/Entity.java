@@ -37,6 +37,7 @@ public class Entity {
     /** Is set when player gets extra time through powerUps etc. */
     public int heal;
     private boolean mouseAlive;
+    protected boolean tOn;
 
     public Entity(TiledMap map) {
         super();
@@ -54,12 +55,13 @@ public class Entity {
         tiles.put("cross", map.getTileSets().getTile(6));
         tiles.put("shoe", map.getTileSets().getTile(7));
         tiles.put("flower", map.getTileSets().getTile(8));
-        tiles.put("mouse", map.getTileSets().getTile(9));
+        tiles.put("antifreeze", map.getTileSets().getTile(9));
         placeObstacleRandom();
         placeObstacleRandom();
         placeObstacleRandom();
         placeObstacleRandom();
         placeObstacleRandom();
+        createNew("antifreeze");
     }
 
     /**
@@ -182,12 +184,31 @@ public class Entity {
             }
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
                     .containsKey("decrease")) {
-                System.out.println("trigger");
                 heal -= 3;
+            }
+            if (l2.getCell(coltile, rowtile).getTile().getProperties()
+                    .containsKey("die")) {
+                startDying();
             }
             l2.setCell(coltile, rowtile, null);
         }
         return true;
+    }
+
+    private void startDying() {
+        tOn = true;
+        new Thread(new Runnable() {
+            public void run() {
+                while (tOn == true) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    heal--;
+                }
+            }
+        }).start();
     }
 
     public void mouse() {

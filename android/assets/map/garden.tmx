@@ -19,7 +19,7 @@
   </tile>
  </tileset>
  <tileset firstgid="5" name="objects" tilewidth="32" tileheight="32">
-  <image source="objects.png" trans="ffffff" width="128" height="32"/>
+  <image source="objects.png" trans="ffffff" width="160" height="32"/>
   <tile id="0">
    <properties>
     <property name="food" value=""/>
@@ -40,6 +40,11 @@
    <properties>
     <property name="flower" value=""/>
     <property name="small_heal" value=""/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="die" value=""/>
    </properties>
   </tile>
  </tileset>

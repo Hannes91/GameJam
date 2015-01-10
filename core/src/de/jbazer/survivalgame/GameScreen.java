@@ -73,23 +73,23 @@ public class GameScreen implements Screen, InputProcessor {
         boolean fromTop = (int) (Math.random() * 2) % 2 == 0;
         System.out.println("random. " + horizontal + fromTop);
         Cell cell = new Cell();
-//        cell.setTile(tiles.get("mouse"));
+        // cell.setTile(tiles.get("mouse"));
         // random rand position
         if (horizontal) {
             if (fromTop) {
                 mouse.setTilePostion(2, ran);
-//                l2.setCell(2, ran, cell);
+                // l2.setCell(2, ran, cell);
             } else {
                 mouse.setTilePostion(39, ran);
-//                l2.setCell(40, ran, cell);
+                // l2.setCell(40, ran, cell);
             }
         } else {
             if (fromTop) {
                 mouse.setTilePostion(ran, 2);
-//                l2.setCell(ran, 2, cell);
+                // l2.setCell(ran, 2, cell);
             } else {
                 mouse.setTilePostion(ran, 39);
-//                l2.setCell(ran, 40, cell);
+                // l2.setCell(ran, 40, cell);
             }
         }
     }
@@ -116,20 +116,21 @@ public class GameScreen implements Screen, InputProcessor {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (time <= 0) {
-                        gameOver();
-                        tOn = false;
-                    } else {
-                        time = time - 1;
-                        score++;
-                        if (time % 2 == 0 || score > 60) {
-                            player.createNew("cross");
-                        }
-                        if (score > 120) {
-                            player.createNew("cross");
-                        }
-                        timeLabel.setText("Time left: " + time);
+                    // if (time <= 0) {
+                    // gameOver();
+                    // tOn = false;
+                    // }
+                    // else {
+                    time = time - 1;
+                    score++;
+                    if (time % 2 == 0 || score > 60) {
+                        player.createNew("cross");
                     }
+                    if (score > 120) {
+                        player.createNew("cross");
+                    }
+                    timeLabel.setText("Time left: " + time);
+                    // }
                 }
             }
         }).start();
@@ -137,24 +138,34 @@ public class GameScreen implements Screen, InputProcessor {
 
     protected void gameOver() {
         System.out.println("Game Over");
-        if (score > MySurvivalGame.getInstance().getHighscore()) {
-            MySurvivalGame.getInstance().setHighscore(score);
-            this.endLabel = new Label("  Game Over\nClick for restart\nScore: "
-                    + score + "\nNew Highscore", skin);
-        } else {
-            this.endLabel = new Label("  Game Over\nClick for restart\nScore: "
-                    + score + "\nCurrent Highscore: "
-                    + MySurvivalGame.getInstance().getHighscore(), skin);
+        if (this.gameState != this.GAME_OVER) {
+
+            if (score > MySurvivalGame.getInstance().getHighscore()) {
+                MySurvivalGame.getInstance().setHighscore(score);
+                this.endLabel = new Label(
+                        "   Game Over\nClick for restart\n      Score: " + score
+                                + "\nNew Highscore", skin);
+            } else {
+                this.endLabel = new Label(
+                        "   Game Over\nClick for restart\n      Score: " + score
+                                + "\nCurrent Highscore: "
+                                + MySurvivalGame.getInstance().getHighscore(),
+                        skin);
+            }
+            this.endLabel.setColor(Color.RED);
+            this.endLabel.setScale(10);
+            this.endLabel.setPosition(230, 150);
+            this.stage.addActor(endLabel);
+            this.gameState = this.GAME_OVER;
         }
-        this.endLabel.setColor(Color.RED);
-        this.endLabel.setScale(10);
-        this.endLabel.setPosition(230, 160);
-        this.stage.addActor(endLabel);
-        this.gameState = this.GAME_OVER;
     }
 
     @Override
     public void render(float delta) {
+        if (time <= 0) {
+            gameOver();
+            tOn = false;
+        }
         if (player.heal != 0) {
             this.time = this.time + player.heal;
             player.heal = 0;
