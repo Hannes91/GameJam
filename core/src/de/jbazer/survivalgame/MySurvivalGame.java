@@ -1,6 +1,9 @@
 package de.jbazer.survivalgame;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,6 +18,9 @@ public class MySurvivalGame extends Game {
     public BitmapFont font;
     private int highscore;
     private static MySurvivalGame instance;
+    private Music music;
+    private static Sound pickupSound;
+    private SoundManager sound;
 
     @Override
     public void create() {
@@ -25,9 +31,15 @@ public class MySurvivalGame extends Game {
         setScreen(new GameScreen(this));
         batch = new SpriteBatch();
         font = new BitmapFont();
+        music = Gdx.audio.newMusic(Gdx.files.internal("sound/music_garden.ogg"));
+        pickupSound = Gdx.audio.newSound(Gdx.files.internal("sound/pickup.ogg"));
+        music.setLooping(true);
+        music.setVolume(0.2f);
+        music.play();
+        sound = new SoundManager();
         instance = this;
     }
-
+    
     public OrthographicCamera getCamera() {
         return camera;
     }
@@ -36,7 +48,6 @@ public class MySurvivalGame extends Game {
         System.out.println("restart game");
         setScreen(new GameScreen(this));
     }
-    
     
     /**
      * @return the highscore

@@ -45,13 +45,47 @@ public class Entity {
         animation = new Animation();
         // save tiles
         tiles = new HashMap<String, TiledMapTile>();
-        tiles.put("grey", map.getTileSets().getTile(1));
-        tiles.put("rock", map.getTileSets().getTile(2));
-        tiles.put("ground", map.getTileSets().getTile(3));
+        tiles.put("fenceHorizontal", map.getTileSets().getTile(1));
+        tiles.put("fenceVertical", map.getTileSets().getTile(2));
+        tiles.put("grass", map.getTileSets().getTile(3));
+        tiles.put("stone", map.getTileSets().getTile(4));
         tiles.put("goal", map.getTileSets().getTile(5));
         tiles.put("cross", map.getTileSets().getTile(6));
         tiles.put("shoe", map.getTileSets().getTile(7));
         tiles.put("flower", map.getTileSets().getTile(8));
+        placeObstacleRandom();
+        placeObstacleRandom();
+        placeObstacleRandom();
+        placeObstacleRandom();
+        placeObstacleRandom();
+    }
+
+    /**
+     * Place an obstacle of siz 2x3 at a random position.
+     */
+    private void placeObstacleRandom() {
+        int x, y;
+        // do {
+        x = (int) (Math.random() * (l1.getWidth() - 6));
+        y = (int) (Math.random() * (l1.getHeight() - 6));
+        // } while (l1.getCell(x, y).getTile().getProperties()
+        // .containsKey("blocked")
+        // || l2.getCell(x, y) != null);
+        Cell cell = new Cell();
+        cell.setTile(tiles.get("stone"));
+        l1.setCell(x + 2, y + 2, cell);
+        l2.setCell(x + 2, y + 2, null);
+        l1.setCell(x + 3, y + 2, cell);
+        l2.setCell(x + 3, y + 2, null);
+        l1.setCell(x + 2, y + 3, cell);
+        l2.setCell(x + 2, y + 3, null);
+        l1.setCell(x + 3, y + 3, cell);
+        l2.setCell(x + 3, y + 3, null);
+        l1.setCell(x + 2, y + 4, cell);
+        l2.setCell(x + 2, y + 4, null);
+        l1.setCell(x + 3, y + 4, cell);
+        l2.setCell(x + 3, y + 4, null);
+
     }
 
     public void setTilePostion(int i1, int i2) {
@@ -129,7 +163,9 @@ public class Entity {
             // if is a heal, heal stronger
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
                     .containsKey("heal")) {
-                heal += 5;
+                heal += 6;
+                SoundManager.getInstance().pickup();
+//                MySurvivalGame.getInstance().pickup();
                 createNew("goal");
                 createNew("flower");
                 createNew("cross");
@@ -164,7 +200,7 @@ public class Entity {
         } while (l1.getCell(ranX, ranY).getTile().getProperties()
                 .containsKey("blocked")
                 || l2.getCell(ranX, ranY) != null);
-//        System.out.println("Place new Stuff on " + ranX + ", " + ranY);
+        // System.out.println("Place new Stuff on " + ranX + ", " + ranY);
         Cell cell = new Cell();
         cell.setTile(tiles.get(type));
         l2.setCell(ranX, ranY, cell);
