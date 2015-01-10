@@ -38,6 +38,7 @@ public class MySurvivalGame extends Game {
         music.setVolume(0.2f);
         music.play();
         sound = new SoundManager();
+        sound.playMiau();
         instance = this;
     }
     

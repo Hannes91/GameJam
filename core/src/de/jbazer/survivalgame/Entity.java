@@ -168,7 +168,7 @@ public class Entity {
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
                     .containsKey("heal")) {
                 heal += 6;
-                SoundManager.getInstance().pickup();
+                SoundManager.getInstance().playMiau();
                 // MySurvivalGame.getInstance().pickup();
                 createNew("goal");
                 createNew("flower");
@@ -176,10 +176,12 @@ public class Entity {
             }
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
                     .containsKey("small_heal")) {
+                SoundManager.getInstance().playPickUp();
                 heal += 1;
             }
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
                     .containsKey("shoe")) {
+                SoundManager.getInstance().playPickUp();
                 this.moveSpeed++;
             }
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
