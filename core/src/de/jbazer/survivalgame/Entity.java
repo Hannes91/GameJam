@@ -133,7 +133,6 @@ public class Entity {
                 createNew("goal");
                 createNew("flower");
                 createNew("cross");
-                createNew("cross");
             }
             if (l2.getCell(coltile, rowtile).getTile().getProperties()
                     .containsKey("small_heal")) {
@@ -153,7 +152,7 @@ public class Entity {
         return true;
     }
 
-    private void createNew(String type) {
+    public void createNew(String type) {
         int ranX, ranY;
         if (mapFull()) {
             // TODO: check if map is full, else you get nullPointer in the Case
@@ -165,7 +164,7 @@ public class Entity {
         } while (l1.getCell(ranX, ranY).getTile().getProperties()
                 .containsKey("blocked")
                 || l2.getCell(ranX, ranY) != null);
-        System.out.println("Place new Goal on " + ranX + ", " + ranY);
+//        System.out.println("Place new Stuff on " + ranX + ", " + ranY);
         Cell cell = new Cell();
         cell.setTile(tiles.get(type));
         l2.setCell(ranX, ranY, cell);

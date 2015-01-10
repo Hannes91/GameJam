@@ -28,7 +28,7 @@ public class GameScreen implements Screen, InputProcessor {
     private SpriteBatch batch;
     private Player player;
     private int tilemapwidth, tilemapHeight;
-    private int time = 10;
+    private int time = 20;
     private boolean tOn = true;
     private final Stage stage;
     public BitmapFont font;
@@ -36,17 +36,21 @@ public class GameScreen implements Screen, InputProcessor {
     private Skin skin;
     private Label endLabel;
     private int gameState = this.GAME_RUNNING;
+    protected int score;
+    private int highscore;
+    private boolean newHighscore;
     private static final int GAME_RUNNING = 0;
     private static final int GAME_OVER = 1;
 
     public GameScreen(MySurvivalGame game) {
         super();
         this.stage = new Stage(new ExtendViewport(480, 320,
+        // this.stage = new Stage(new ExtendViewport(960, 640,
                 new OrthographicCamera()));
         font = new BitmapFont();
         this.game = game;
         cam = this.game.getCamera();
-        map = new TmxMapLoader().load("map/map.tmx");
+        map = new TmxMapLoader().load("map/garden.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         tilemapwidth = map.getProperties().get("width", Integer.class);
         tilemapHeight = map.getProperties().get("height", Integer.class);
@@ -80,11 +84,15 @@ public class GameScreen implements Screen, InputProcessor {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (time == 0) {
+                    if (time <= 0) {
                         gameOver();
                         tOn = false;
                     } else {
                         time = time - 1;
+                        score++;
+                        if (time % 2 == 0 || score > 60) {
+                            player.createNew("cross");
+                        }
                         timeLabel.setText("Time left: " + time);
                     }
                 }
@@ -94,7 +102,15 @@ public class GameScreen implements Screen, InputProcessor {
 
     protected void gameOver() {
         System.out.println("Game Over");
-        this.endLabel = new Label("Game Over\n Click for restart", skin);
+        if (score > MySurvivalGame.getInstance().getHighscore()) {
+            MySurvivalGame.getInstance().setHighscore(score);
+            this.endLabel = new Label("  Game Over\nClick for restart\nScore: "
+                    + score + "\nNew Highscore", skin);
+        } else {
+            this.endLabel = new Label("  Game Over\nClick for restart\nScore: "
+                    + score + "\nCurrent Highscore: "
+                    + MySurvivalGame.getInstance().getHighscore(), skin);
+        }
         this.endLabel.setColor(Color.RED);
         this.endLabel.setScale(10);
         this.endLabel.setPosition(230, 160);
@@ -109,22 +125,22 @@ public class GameScreen implements Screen, InputProcessor {
             player.heal = 0;
             timeLabel.setText("Time left: " + time);
         }
-        
+
         Gdx.gl.glClearColor(0, 1, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        cam.position.x = player.getX() + 480 / 4;
-        cam.position.y = player.getY() + 320 / 4;
+        cam.position.x = player.getX() + 960 / 4;
+        cam.position.y = player.getY() + 640 / 4;
         if (cam.position.x < cam.viewportWidth / 2) {
             cam.position.x = cam.viewportWidth / 2;
         }
-        if (cam.position.x > tilemapwidth * 16 - cam.viewportWidth / 2) {
-            cam.position.x = tilemapwidth * 16 - cam.viewportWidth / 2;
+        if (cam.position.x > tilemapwidth * 32 - cam.viewportWidth / 2) {
+            cam.position.x = tilemapwidth * 32 - cam.viewportWidth / 2;
         }
         if (cam.position.y < cam.viewportHeight / 2) {
             cam.position.y = cam.viewportHeight / 2;
         }
-        if (cam.position.y > tilemapHeight * 16 - cam.viewportHeight / 2) {
-            cam.position.y = tilemapHeight * 16 - cam.viewportHeight / 2;
+        if (cam.position.y > tilemapHeight * 32 - cam.viewportHeight / 2) {
+            cam.position.y = tilemapHeight * 32 - cam.viewportHeight / 2;
         }
         cam.update();
         batch.setProjectionMatrix(cam.combined);

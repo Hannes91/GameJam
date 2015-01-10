@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="42" height="42" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset1" tilewidth="32" tileheight="32">
+  <image source="tileset1.png" trans="ffffff" width="128" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="5" name="objects" tilewidth="32" tileheight="32">
+  <image source="objects.png" trans="ffffff" width="128" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="food" value=""/>
+    <property name="heal" value=""/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="decrease" value=""/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="shoe" value=""/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="flower" value=""/>
+    <property name="small_heal" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="ground" width="42" height="42">
+  <data encoding="base64" compression="zlib">
+   eJzt2bERgCAAwEBE9p9Z2MDO3PlF+u+zxhhXvLWbuzve5OQMx8lZjpOzHCdnOU7Ocpyc5Tg5y3FyluPkLMf5X+d5SF9/rDef6wGBABPB
+  </data>
+ </layer>
+ <layer name="objects" width="42" height="42">
+  <data encoding="base64" compression="zlib">
+   eJzt2bEOgCAMRVEW0f//YicXosYmhb7WexYSwvBoWhZay2OPDvBCORu0HdEBnFS5B+ajV+JUrX037kfWYcz0lFFBH9bVNsNZ5Tpeouv5hWd/zpoz67x7qPp2Air+OGNZ75w1N+LQMwAseDN0Kf99KGe7cwKRWADQ
+  </data>
+ </layer>
+</map>

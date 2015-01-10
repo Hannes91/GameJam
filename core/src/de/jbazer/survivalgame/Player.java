@@ -12,26 +12,26 @@ public class Player extends Entity {
 
     public Player(TiledMap map) {
         super(map);
-        width = 16;
-        height = 16;
-        moveSpeed = 2;
+        width = 32;
+        height = 32;
+        moveSpeed = 3;
         Texture tex = MySurvivalGame.res.getTexture("player");
         spritesDown = new TextureRegion[4];
         for (int i = 0; i < spritesDown.length; i++) {
             spritesDown[i] = new TextureRegion(tex, i * width, 0, width, height);
         }
-        spritesRight = new TextureRegion[1];
+        spritesRight = new TextureRegion[4];
         for (int i = 0; i < spritesRight.length; i++) {
-            spritesRight[i] = new TextureRegion(tex, i * width, 16, width,
+            spritesRight[i] = new TextureRegion(tex, i * width, 32, width,
                     height);
         }
-        spritesUp = new TextureRegion[1];
+        spritesUp = new TextureRegion[4];
         for (int i = 0; i < spritesUp.length; i++) {
-            spritesUp[i] = new TextureRegion(tex, i * width, 32, width, height);
+            spritesUp[i] = new TextureRegion(tex, i * width, 64, width, height);
         }
-        spritesLeft = new TextureRegion[1];
+        spritesLeft = new TextureRegion[4];
         for (int i = 0; i < spritesLeft.length; i++) {
-            spritesLeft[i] = new TextureRegion(tex, i * width, 48, width,
+            spritesLeft[i] = new TextureRegion(tex, i * width, 96, width,
                     height);
         }
         animation.setFrames(spritesDown, 1 / 5f);
