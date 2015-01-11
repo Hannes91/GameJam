@@ -53,7 +53,7 @@
  </tileset>
  <layer name="ground" width="42" height="42">
   <data encoding="base64" compression="zlib">
-   eJzt2bERgCAAwEBE9p9Z2MDO3PlF+u+zxhhXvLWbuzve5OQMx8lZjpOzHCdnOU7Ocpyc5Tg5y3FyluPkLMf5X+d5SF9/rDef6wGBABPB
+   eJzt2bERgDAQwLBP2H9nGIEu5lDhXr3XzKwPtJ+ueJuTMxwnZzlOznKcnOU4Octxcpbj5CzHyVmOk7Mc53+dp//V227beRO1
   </data>
  </layer>
  <layer name="objects" width="42" height="42">

@@ -67,13 +67,12 @@ public class Entity {
      */
     public void initStuff() {
         this.isP = true;
-        placeObstacleRandom();
-        placeObstacleRandom();
-        placeObstacleRandom();
-        placeObstacleRandom();
-        placeObstacleRandom();
-        placeObstacleRandom();
-        placeObstacleRandom();
+        placeObstacleRandomVertical();
+        placeObstacleRandomVertical();
+        placeObstacleRandomVertical();
+        placeObstacleRandomHorizontal();
+        placeObstacleRandomHorizontal();
+        placeObstacleRandomHorizontal();
         createNew("antifreeze");
         createNew("antifreeze");
         placeShoe();
@@ -102,7 +101,7 @@ public class Entity {
     /**
      * Place an obstacle of siz 2x3 at a random position.
      */
-    private void placeObstacleRandom() {
+    private void placeObstacleRandomVertical() {
         int x, y;
         // do {
         x = (int) (Math.random() * (l1.getWidth() - 6));
@@ -125,6 +124,30 @@ public class Entity {
         l1.setCell(x + 3, y + 4, cell);
         l2.setCell(x + 3, y + 4, null);
 
+    }
+    
+    /**
+     * Place an obstacle of siz 2x3 at a random position.
+     */
+    private void placeObstacleRandomHorizontal() {
+        int x, y;
+        // do {
+        x = (int) (Math.random() * (l1.getWidth() - 6));
+        y = (int) (Math.random() * (l1.getHeight() - 6));
+        Cell cell = new Cell();
+        cell.setTile(tiles.get("stone"));
+        l1.setCell(x + 2, y + 2, cell);
+        l2.setCell(x + 2, y + 2, null);
+        l1.setCell(x + 2, y + 3, cell);
+        l2.setCell(x + 2, y + 3, null);
+        l1.setCell(x + 3, y + 2, cell);
+        l2.setCell(x + 3, y + 2, null);
+        l1.setCell(x + 3, y + 3, cell);
+        l2.setCell(x + 3, y + 3, null);
+        l1.setCell(x + 4, y + 2, cell);
+        l2.setCell(x + 4, y + 2, null);
+        l1.setCell(x + 4, y + 3, cell);
+        l2.setCell(x + 4, y + 3, null);
     }
 
     public void setTilePostion(int i1, int i2) {

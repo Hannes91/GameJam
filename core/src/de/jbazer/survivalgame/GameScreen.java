@@ -368,9 +368,20 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public boolean touchDown(int x, int y, int pointer, int button) {
         if (gameState == this.GAME_OVER) {
             game.restart();
+        } else {
+            System.out.println("X: " + x + ", Y: " + y);
+            if (y < 200) {
+                player.setUp();
+            } else if (y > 1000) {
+                player.setDown();
+            } else if (x < 300) {
+                player.setLeft();
+            } else if (x > 1500) {
+                player.setRight();
+            }
         }
         return true;
     }
