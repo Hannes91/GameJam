@@ -128,7 +128,7 @@ public class GameScreen implements Screen, InputProcessor {
             // Mouse catched
             mouse = null;
             startMouseTimer();
-            SoundManager.getInstance().playMiau();
+//            SoundManager.getInstance().playMiau();
             player.heal += 10;
         }
         if (mouse != null && mouse.stopped) {

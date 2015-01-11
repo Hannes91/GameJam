@@ -120,6 +120,7 @@ public class TextBubbleManager {
      */
     public final void setActive(boolean isActive) {
         this.isActive = isActive;
+        SoundManager.getInstance().playMiau();
     }
 
     public static TextBubbleManager getInstance() {
@@ -159,7 +160,7 @@ public class TextBubbleManager {
                         break;
                 }
             } while (activeBubble == lastIdleState);
-            this.disableIn(3000);
+            this.disableIn(4000);
         }
     }
 

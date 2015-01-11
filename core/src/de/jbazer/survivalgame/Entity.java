@@ -271,7 +271,7 @@ public class Entity {
                     .containsKey("heal")) {
                 if (isP) {
                     heal += 5;
-                    SoundManager.getInstance().playMiau();
+                    SoundManager.getInstance().playSound("pickup");
                     // MySurvivalGame.getInstance().pickup();
                 }
                 createNew("goal");
