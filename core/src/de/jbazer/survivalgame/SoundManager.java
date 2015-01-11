@@ -23,9 +23,9 @@ public class SoundManager {
                 Gdx.audio.newSound(Gdx.files.internal("sound/miau2.ogg")));
         sounds.put("miau3",
                 Gdx.audio.newSound(Gdx.files.internal("sound/miau3.ogg")));
-        sounds.put("miau4",
-                Gdx.audio.newSound(Gdx.files.internal("sound/miau4.ogg")));
         sounds.put("miau5",
+                Gdx.audio.newSound(Gdx.files.internal("sound/miau4.ogg")));
+        sounds.put("miau4",
                 Gdx.audio.newSound(Gdx.files.internal("sound/miau5.ogg")));
         sounds.put("dec",
                 Gdx.audio.newSound(Gdx.files.internal("sound/dec.ogg")));
@@ -41,9 +41,13 @@ public class SoundManager {
     }
 
     public void playMiau() {
-        int ran = (int) (Math.random() * 5);
+        int ran = (int) (Math.random() * 4);
         String name = "miau" + (ran + 1);
         sounds.get(name).play();
+    }
+
+    public void miauNegative() {
+        sounds.get("miau5").play();
     }
 
 }

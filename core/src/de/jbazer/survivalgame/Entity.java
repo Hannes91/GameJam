@@ -275,6 +275,7 @@ public class Entity {
                     // MySurvivalGame.getInstance().pickup();
                 }
                 createNew("goal");
+                bubble.food();
                 l2.setCell(nextX, nextY, null);
                 // createNew("flower");
                 // createNew("cross");
@@ -309,6 +310,7 @@ public class Entity {
                         && l2.getCell(nextX, nextY).getTile().getProperties()
                                 .containsKey("decrease")) {
                     SoundManager.getInstance().playSound("dec");
+                    bubble.water();
                     heal -= 3;
                 }
                 l2.setCell(nextX, nextY, null);
@@ -355,6 +357,7 @@ public class Entity {
                     l2.setCell(ran, 40, cell);
                 }
             }
+            bubble.mouse();
         }
     }
 

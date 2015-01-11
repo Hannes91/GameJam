@@ -13,7 +13,7 @@ public class TextBubbleManager {
     private static final int START_1 = 1;
     private static final int ANTIFREEZE_1 = 2;
     private static final int FENCE = 3;
-    private static final int EATING = 4;
+    private static final int FOOD_1 = 4;
     private static final int ROCK = 5;
     private static final int ANTIFREEZE_2 = 6;
     private static final int SHOE = 7;
@@ -21,9 +21,16 @@ public class TextBubbleManager {
     private static final int IDLE_2 = 9;
     private static final int IDLE_3 = 10;
     private static final int IDLE_4 = 11;
-    private static final int MOUSE = 12;
+    private static final int MOUSE_1 = 12;
     private static final int START_2 = 13;
     private static final int IDLE_5 = 14;
+    private static final int WATER = 15;
+    private static final int FOOD_2 = 16;
+    private static final int MOUSE_2 = 17;
+    private static final int IDLE_6 = 18;
+    private static final int IDLE_7 = 19;
+    private static final int IDLE_8 = 20;
+    private static final int FOOD_3 = 21;
 
     // Events
     private static final int FIRST_STEP_MADE = 1;
@@ -32,7 +39,7 @@ public class TextBubbleManager {
     // Trigger booleans
     private boolean firstStep;
 
-    private int activeBubble = this.START_1;
+    private int activeBubble = START_2;
     private int steps;
     private int lastIdleState = this.IDLE_1;
     private boolean lastAntifreeze;
@@ -43,8 +50,14 @@ public class TextBubbleManager {
     private boolean flagFencePlayed;
     protected boolean isReady;
     private boolean flagAntifreeze;
+    private boolean flagWater;
+    private int food;
 
     public TextBubbleManager() {
+        if ((int) (Math.random() * 2) == 0) {
+            activeBubble = START_1;
+        }
+
         if ((int) (Math.random() * 2) == 0) {
             lastAntifreeze = true;
         }
@@ -139,7 +152,7 @@ public class TextBubbleManager {
         if (steps % 100 == 0 && !isActive) {
             // generate new idle message
             do {
-                final int ran = (int) (Math.random() * 5);
+                final int ran = (int) (Math.random() * 8);
                 switch (ran) {
                     case 0:
                         this.setActiveBubble(this.IDLE_1);
@@ -156,6 +169,15 @@ public class TextBubbleManager {
                     case 4:
                         this.setActiveBubble(this.IDLE_5);
                         break;
+                    case 5:
+                        this.setActiveBubble(this.IDLE_6);
+                        break;
+                    case 6:
+                        this.setActiveBubble(this.IDLE_7);
+                        break;
+                    case 7:
+                        this.setActiveBubble(this.IDLE_8);
+                        break;
                     default:
                         break;
                 }
@@ -167,7 +189,7 @@ public class TextBubbleManager {
     public void shoeCollected() {
         if (!isActive && !flagShoePlayed) {
             this.setActiveBubble(this.SHOE);
-            this.disableIn(3000);
+            this.disableIn(4000);
             flagShoePlayed = true;
         }
     }
@@ -176,7 +198,7 @@ public class TextBubbleManager {
         fenceCounter++;
         if (!flagFencePlayed && fenceCounter > 5 && !isActive) {
             this.setActiveBubble(this.FENCE);
-            this.disableIn(3000);
+            this.disableIn(4000);
             flagFencePlayed = true;
         }
     }
@@ -185,7 +207,7 @@ public class TextBubbleManager {
         rockCounter++;
         if (!flagRockPlayed && rockCounter > 5 && !isActive) {
             this.setActiveBubble(this.ROCK);
-            this.disableIn(3000);
+            this.disableIn(4000);
             flagRockPlayed = true;
         }
     }
@@ -193,7 +215,7 @@ public class TextBubbleManager {
     public void seeAntifreeze() {
         if (!isActive && !flagAntifreeze) {
             this.setActiveBubble(this.ANTIFREEZE_2);
-            this.disableIn(3000);
+            this.disableIn(4000);
             flagAntifreeze = true;
         }
     }
@@ -201,7 +223,50 @@ public class TextBubbleManager {
     public void ateAnti() {
         if (!isActive) {
             this.setActiveBubble(this.ANTIFREEZE_1);
-            this.disableIn(3000);
+            SoundManager.getInstance().miauNegative();
+            this.disableIn(4000);
+        }
+    }
+
+    public void water() {
+        if (!isActive && !flagWater) {
+            this.setActiveBubble(this.WATER);
+            SoundManager.getInstance().miauNegative();
+            this.disableIn(4000);
+            flagWater = true;
+        } else {
+            flagWater = false;
+        }
+    }
+
+    public void food() {
+        food++;
+        if (!isActive && food % 3 == 0) {
+            switch ((int) (Math.random() * 3)) {
+                case 0:
+                    this.setActiveBubble(this.FOOD_1);
+                    break;
+                case 1:
+                    this.setActiveBubble(this.FOOD_2);
+                    break;
+                case 2:
+                    this.setActiveBubble(this.FOOD_3);
+                    break;
+                default:
+                    break;
+            }
+            this.disableIn(4000);
+        }
+    }
+
+    public void mouse() {
+        if (!isActive && (int) (Math.random() * 3) == 0) {
+            if ((int) (Math.random() * 2) == 0) {
+                this.setActiveBubble(this.MOUSE_1);
+            } else {
+                this.setActiveBubble(this.MOUSE_2);
+            }
+            this.disableIn(4000);
         }
     }
 }

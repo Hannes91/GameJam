@@ -187,17 +187,11 @@ public class GameScreen implements Screen, InputProcessor {
             batch.setColor(c.r, c.g, c.b, 1f);
             batch.end();
         }
-        // game.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        // game.font.setScale(5);
-        // batch.begin();
-        // game.font.draw(batch, "Time left: ", 100, 100);
-        // batch.end();
-        // game.font.draw(game.batch, "Time left: " + time + "s", 100, 100);
     }
 
     private void startMouseTimer() {
-        int minWait = 3;
-        int maxWait = 6;
+        int minWait = 4;
+        int maxWait = 7;
         final int ran = (int) (Math.random() * maxWait + minWait);
         new Thread(new Runnable() {
             public void run() {
@@ -223,24 +217,24 @@ public class GameScreen implements Screen, InputProcessor {
             if (fromTop) {
                 mouse.setTilePostion(2, ran);
                 mouse.setDirection(Mouse.RIGHT);
-                System.out.println("mouse to right");
+//                System.out.println("mouse to right");
                 // l2.setCell(2, ran, cell);
             } else {
                 mouse.setTilePostion(39, ran);
                 mouse.setDirection(Mouse.LEFT);
-                System.out.println("mouse to left");
+//                System.out.println("mouse to left");
                 // l2.setCell(40, ran, cell);
             }
         } else {
             if (fromTop) {
                 mouse.setTilePostion(ran, 2);
                 mouse.setDirection(Mouse.UP);
-                System.out.println("mouse to up");
+//                System.out.println("mouse to up");
                 // l2.setCell(ran, 2, cell);
             } else {
                 mouse.setTilePostion(ran, 39);
                 mouse.setDirection(Mouse.DOWN);
-                System.out.println("mouse to down");
+//                System.out.println("mouse to down");
                 // l2.setCell(ran, 40, cell);
             }
         }
