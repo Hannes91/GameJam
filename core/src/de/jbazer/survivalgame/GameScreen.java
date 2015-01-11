@@ -51,13 +51,14 @@ public class GameScreen implements Screen, InputProcessor {
     private static final int GAME_OVER = 1;
     private LoadManager manager;
     private final ArrayList<Texture> texts;
-    private boolean loading = true;;
-    private boolean prepared;
+    private boolean loading = true;
+    private static TextBubbleManager bubble;
 
     public GameScreen(MySurvivalGame game) {
         super();
         manager = new LoadManager();
         manager.prepareAssets();
+        bubble = TextBubbleManager.getInstance();
         this.texts = new ArrayList<Texture>();
         // this.loadAssets();
         this.stage = new Stage(new ExtendViewport(480, 320,
@@ -72,22 +73,16 @@ public class GameScreen implements Screen, InputProcessor {
         tilemapHeight = map.getProperties().get("height", Integer.class);
         batch = new SpriteBatch();
         player = new Player(map);
-        player.setTilePostion(1, 21);
+        player.setTilePostion(4, 21);
         this.createUI();
         this.startTimer();
         Gdx.input.setInputProcessor(this);
         this.startMouseTimer();
         player.initStuff();
-        // manager.finishLoading();
-        // prepareTexts();
     }
 
     private void prepareTexts() {
-        // manager.finishLoading();
-        System.out.println("test " + this.texts.size());
         this.texts.add(new Texture(Gdx.files.internal("text/text1.png")));
-        System.out.println("test " + this.texts.size());
-        prepared = true;
     }
 
     @Override
@@ -95,14 +90,10 @@ public class GameScreen implements Screen, InputProcessor {
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         if (this.loading && LoadManager.getInstance().update()) {
-            System.out.println("1");
-            // TODO:
-            this.createUI();
             prepareTexts();
             this.loading = false;
         }
         if (this.loading) {
-            System.out.println("2");
             return;
         }
         if (time <= 0) {
@@ -169,20 +160,16 @@ public class GameScreen implements Screen, InputProcessor {
         if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
             player.setRight();
         }
-        // System.out.println(manager.isLoaded("text/text1.png"));
-        // if (manager.isLoaded("text/text1.png")) {
-        // System.out.println("loaded");
-        // if (prepared) {
-        // }
-        // }
         this.stage.act(delta);
         this.stage.draw();
-        batch.begin();
-        final int length = 300;
-        final int height = 70;
-        batch.draw(this.texts.get(0), player.getX() - length / 2 + 16,
-                player.getY() + 40, length, height);
-        batch.end();
+        if (bubble.isActive()) {
+            batch.begin();
+            final int length = 300;
+            final int height = 70;
+            batch.draw(this.texts.get(bubble.getActiveBubble() - 1), player.getX() - length / 2 + 16,
+                    player.getY() + 40, length, height);
+            batch.end();
+        }
         // game.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         // game.font.setScale(5);
         // batch.begin();
@@ -244,25 +231,16 @@ public class GameScreen implements Screen, InputProcessor {
 
     private void createUI() {
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        this.timeLabel = new Label("Timer-----", skin);
+        this.timeLabel = new Label("", skin);
         this.timeLabel.setColor(Color.RED);
         this.timeLabel.setScale(2);
         this.timeLabel.setPosition(14, 286);
-        this.scoreLabel = new Label("Score-----", skin);
+        this.scoreLabel = new Label("", skin);
         this.scoreLabel.setColor(Color.RED);
-        this.scoreLabel.setScale(3);
+        this.scoreLabel.setScale(2);
         this.scoreLabel.setPosition(460, 286);
-        // if (manager.isLoaded("text\text1.png")) {
-        // System.out.println("loaded");
-        // text1 = manager.get("text\text1.png", Texture.class);
-        // }
         this.stage.addActor(timeLabel);
         this.stage.addActor(scoreLabel);
-    }
-
-    private void loadAssets() {
-        System.out.println("load assets");
-        manager.load("text/text1.png", Texture.class);
     }
 
     /**

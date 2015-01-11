@@ -40,9 +40,11 @@ public class Entity {
     private boolean mouseAlive;
     protected boolean tOn;
     private boolean isP;
+    private TextBubbleManager bubble;
 
     public Entity(TiledMap map) {
         super();
+        bubble = TextBubbleManager.getInstance();
         l1 = (TiledMapTileLayer) map.getLayers().get(0);
         l2 = (TiledMapTileLayer) map.getLayers().get(1);
         tileSize = map.getProperties().get("tilewidth", Integer.class);
@@ -209,6 +211,9 @@ public class Entity {
             nextX--;
         if (right)
             nextX++;
+        if (!moving && isP) {
+            bubble.step();
+        }
         // If is an collectable
         if (l2 != null && l2.getCell(nextX, nextY) != null) {
             // if is a heal, heal stronger
