@@ -283,9 +283,11 @@ public class Entity {
             if (l2.getCell(nextX, nextY) != null
                     && l2.getCell(nextX, nextY).getTile().getProperties()
                             .containsKey("die")) {
-                SoundManager.getInstance().playSound("dec");
-                bubble.ateAnti();
-                startDying();
+                if (isP) {
+                    SoundManager.getInstance().playSound("dec");
+                    bubble.ateAnti();
+                    startDying();
+                }
                 l2.setCell(nextX, nextY, null);
                 createNew("antifreeze");
                 createNew("antifreeze");

@@ -52,6 +52,10 @@ public class GameScreen implements Screen, InputProcessor {
     private LoadManager manager;
     private final ArrayList<Texture> texts;
     private boolean loading = true;
+    private boolean bUp;
+    private boolean bDown;
+    private boolean bLeft;
+    private boolean bRight;
     private static TextBubbleManager bubble;
 
     public GameScreen(MySurvivalGame game) {
@@ -96,6 +100,13 @@ public class GameScreen implements Screen, InputProcessor {
         this.texts.add(new Texture(Gdx.files.internal("text/text12.png")));
         this.texts.add(new Texture(Gdx.files.internal("text/text13.png")));
         this.texts.add(new Texture(Gdx.files.internal("text/text14.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text15.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text16.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text17.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text18.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text19.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text20.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text21.png")));
     }
 
     @Override
@@ -128,7 +139,8 @@ public class GameScreen implements Screen, InputProcessor {
             // Mouse catched
             mouse = null;
             startMouseTimer();
-//            SoundManager.getInstance().playMiau();
+            SoundManager.getInstance().playMiau();
+            // SoundManager.getInstance().playMiau();
             player.heal += 10;
         }
         if (mouse != null && mouse.stopped) {
@@ -161,21 +173,21 @@ public class GameScreen implements Screen, InputProcessor {
             mouse.update(delta);
             mouse.draw(batch);
         }
-        if (Gdx.input.isKeyPressed(Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Keys.UP) || bUp) {
             player.setUp();
         }
-        if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+        if (Gdx.input.isKeyPressed(Keys.DOWN) || bDown) {
             player.setDown();
         }
-        if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Keys.LEFT) || bLeft) {
             player.setLeft();
         }
-        if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Keys.RIGHT) || bRight) {
             player.setRight();
         }
         this.stage.act(delta);
         this.stage.draw();
-        if (bubble.isActive()) {
+        if (bubble.isActive() && gameState != GAME_OVER) {
             batch.begin();
             final int length = 300;
             final int height = 70;
@@ -217,24 +229,24 @@ public class GameScreen implements Screen, InputProcessor {
             if (fromTop) {
                 mouse.setTilePostion(2, ran);
                 mouse.setDirection(Mouse.RIGHT);
-//                System.out.println("mouse to right");
+                // System.out.println("mouse to right");
                 // l2.setCell(2, ran, cell);
             } else {
                 mouse.setTilePostion(39, ran);
                 mouse.setDirection(Mouse.LEFT);
-//                System.out.println("mouse to left");
+                // System.out.println("mouse to left");
                 // l2.setCell(40, ran, cell);
             }
         } else {
             if (fromTop) {
                 mouse.setTilePostion(ran, 2);
                 mouse.setDirection(Mouse.UP);
-//                System.out.println("mouse to up");
+                // System.out.println("mouse to up");
                 // l2.setCell(ran, 2, cell);
             } else {
                 mouse.setTilePostion(ran, 39);
                 mouse.setDirection(Mouse.DOWN);
-//                System.out.println("mouse to down");
+                // System.out.println("mouse to down");
                 // l2.setCell(ran, 40, cell);
             }
         }
@@ -304,14 +316,14 @@ public class GameScreen implements Screen, InputProcessor {
                                 + score + "\nNew Highscore", skin);
             } else {
                 this.endLabel = new Label(
-                        "   Game Over\nClick for restart\n      Score: "
+                        "          Game Over\n       Click for restart\n             Score: "
                                 + score + "\nCurrent Highscore: "
                                 + MySurvivalGame.getInstance().getHighscore(),
                         skin);
             }
             this.endLabel.setColor(Color.RED);
             this.endLabel.setScale(10);
-            this.endLabel.setPosition(230, 150);
+            this.endLabel.setPosition(215, 140);
             this.stage.addActor(endLabel);
             this.gameState = this.GAME_OVER;
         }
@@ -368,13 +380,17 @@ public class GameScreen implements Screen, InputProcessor {
         } else {
             System.out.println("X: " + x + ", Y: " + y);
             if (y < 200) {
-                player.setUp();
-            } else if (y > 1000) {
-                player.setDown();
+                bUp = true;
+                // player.setUp();
+            } else if (y > 900) {
+                bDown = true;
+                // player.setDown();
             } else if (x < 300) {
-                player.setLeft();
+                bLeft = true;
+                // player.setLeft();
             } else if (x > 1500) {
-                player.setRight();
+                bRight = true;
+                // player.setRight();
             }
         }
         return true;
@@ -382,8 +398,11 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // TODO Auto-generated method stub
-        return false;
+        bUp = false;
+        bDown = false;
+        bLeft = false;
+        bRight = false;
+        return true;
     }
 
     @Override
