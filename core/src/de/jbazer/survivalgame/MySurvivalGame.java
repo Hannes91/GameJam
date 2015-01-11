@@ -38,7 +38,7 @@ public class MySurvivalGame extends Game {
         music = Gdx.audio.newMusic(Gdx.files.internal("sound/music_garden.ogg"));
         pickupSound = Gdx.audio.newSound(Gdx.files.internal("sound/pickup.ogg"));
         music.setLooping(true);
-        music.setVolume(0.5f);
+        music.setVolume(0.65f);
         music.play();
         sound = new SoundManager();
         sound.playMiau();

@@ -379,10 +379,10 @@ public class GameScreen implements Screen, InputProcessor {
             game.restart();
         } else {
             System.out.println("X: " + x + ", Y: " + y);
-            if (y < 200) {
+            if (y < 300) {
                 bUp = true;
                 // player.setUp();
-            } else if (y > 900) {
+            } else if (y > 800) {
                 bDown = true;
                 // player.setDown();
             } else if (x < 300) {
