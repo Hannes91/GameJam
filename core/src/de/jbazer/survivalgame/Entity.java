@@ -165,6 +165,43 @@ public class Entity {
     public boolean validateNextPostion() {
         rowtile = y / tileSize;
         coltile = x / tileSize;
+        int nextX = coltile;
+        int nextY = rowtile;
+        if (up)
+            nextY++;
+        if (down)
+            nextY--;
+        if (left)
+            nextX--;
+        if (right)
+            nextX++;
+        if (l1.getCell(nextX, nextY).getTile().getProperties()
+                .containsKey("fence")) {
+            bubble.walkedAgainstFence();
+        }
+        if (l1.getCell(nextX, nextY).getTile().getProperties()
+                .containsKey("rock")) {
+            bubble.walkedAgainstRock();
+        }
+        try {
+            if (l2.getCell(nextX + 3, nextY) != null
+                    && l2.getCell(nextX + 3, nextY).getTile().getProperties()
+                            .containsKey("die")
+                    || l2.getCell(nextX - 3, nextY) != null
+                    && l2.getCell(nextX - 3, nextY).getTile().getProperties()
+                            .containsKey("die")
+                    || l2.getCell(nextX, nextY + 3) != null
+                    && l2.getCell(nextX, nextY + 3).getTile().getProperties()
+                            .containsKey("die")
+                    || l2.getCell(nextX, nextY - 3) != null
+                    && l2.getCell(nextX, nextY - 3).getTile().getProperties()
+                            .containsKey("die")) {
+                bubble.seeAntifreeze();
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         if (up) {
             if (l1.getCell(coltile, rowtile + 1).getTile().getProperties()
                     .containsKey("blocked")) {
@@ -201,16 +238,6 @@ public class Entity {
                 xdest = x + tileSize;
             }
         }
-        int nextX = coltile;
-        int nextY = rowtile;
-        if (up)
-            nextY++;
-        if (down)
-            nextY--;
-        if (left)
-            nextX--;
-        if (right)
-            nextX++;
         if (!moving && isP) {
             bubble.step();
         }
@@ -233,10 +260,12 @@ public class Entity {
                     && l2.getCell(nextX, nextY).getTile().getProperties()
                             .containsKey("die")) {
                 SoundManager.getInstance().playSound("dec");
+                bubble.ateAnti();
                 startDying();
                 l2.setCell(nextX, nextY, null);
                 createNew("antifreeze");
                 createNew("antifreeze");
+                // bubble.antiFreezeCreated();
             }
             // Only when this is the player and not a mouse
             if (isP) {
@@ -250,6 +279,7 @@ public class Entity {
                         && l2.getCell(nextX, nextY).getTile().getProperties()
                                 .containsKey("shoe")) {
                     SoundManager.getInstance().playSound("pickup");
+                    bubble.shoeCollected();
                     this.moveSpeed++;
                 }
                 if (l2.getCell(nextX, nextY) != null

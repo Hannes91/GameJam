@@ -83,6 +83,19 @@ public class GameScreen implements Screen, InputProcessor {
 
     private void prepareTexts() {
         this.texts.add(new Texture(Gdx.files.internal("text/text1.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text2.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text3.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text4.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text5.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text6.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text7.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text8.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text9.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text10.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text11.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text12.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text13.png")));
+        this.texts.add(new Texture(Gdx.files.internal("text/text14.png")));
     }
 
     @Override
