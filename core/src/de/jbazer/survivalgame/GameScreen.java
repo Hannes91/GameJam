@@ -1,12 +1,16 @@
 package de.jbazer.survivalgame;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -14,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -29,7 +34,7 @@ public class GameScreen implements Screen, InputProcessor {
     private SpriteBatch batch;
     private Player player;
     private int tilemapwidth, tilemapHeight;
-    private int time = 20;
+    private int time = 25;
     private boolean tOn = true;
     private final Stage stage;
     public BitmapFont font;
@@ -44,9 +49,17 @@ public class GameScreen implements Screen, InputProcessor {
     private Label scoreLabel;
     private static final int GAME_RUNNING = 0;
     private static final int GAME_OVER = 1;
+    private LoadManager manager;
+    private final ArrayList<Texture> texts;
+    private boolean loading = true;;
+    private boolean prepared;
 
     public GameScreen(MySurvivalGame game) {
         super();
+        manager = new LoadManager();
+        manager.prepareAssets();
+        this.texts = new ArrayList<Texture>();
+        // this.loadAssets();
         this.stage = new Stage(new ExtendViewport(480, 320,
         // this.stage = new Stage(new ExtendViewport(960, 640,
                 new OrthographicCamera()));
@@ -59,145 +72,39 @@ public class GameScreen implements Screen, InputProcessor {
         tilemapHeight = map.getProperties().get("height", Integer.class);
         batch = new SpriteBatch();
         player = new Player(map);
-        player.setTilePostion(1, 25);
+        player.setTilePostion(1, 21);
         this.createUI();
         this.startTimer();
         Gdx.input.setInputProcessor(this);
         this.startMouseTimer();
         player.initStuff();
-        // createNewMouse();
+        // manager.finishLoading();
+        // prepareTexts();
     }
 
-    private void startMouseTimer() {
-        int minWait = 3;
-        int maxWait = 6;
-        final int ran = (int) (Math.random() * maxWait + minWait);
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    Thread.sleep(1000 * ran);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                createNewMouse();
-            }
-        }).start();
-    }
-
-    private void createNewMouse() {
-        mouse = new Mouse(map);
-        int ran = (int) (Math.random() * 42);
-        boolean horizontal = ran % 2 == 0;
-        boolean fromTop = (int) (Math.random() * 2) % 2 == 0;
-        Cell cell = new Cell();
-        // cell.setTile(tiles.get("mouse"));
-        // random rand position
-        if (horizontal) {
-            if (fromTop) {
-                mouse.setTilePostion(2, ran);
-                mouse.setDirection(Mouse.RIGHT);
-                System.out.println("mouse to right");
-                // l2.setCell(2, ran, cell);
-            } else {
-                mouse.setTilePostion(39, ran);
-                mouse.setDirection(Mouse.LEFT);
-                System.out.println("mouse to left");
-                // l2.setCell(40, ran, cell);
-            }
-        } else {
-            if (fromTop) {
-                mouse.setTilePostion(ran, 2);
-                mouse.setDirection(Mouse.UP);
-                System.out.println("mouse to up");
-                // l2.setCell(ran, 2, cell);
-            } else {
-                mouse.setTilePostion(ran, 39);
-                mouse.setDirection(Mouse.DOWN);
-                System.out.println("mouse to down");
-                // l2.setCell(ran, 40, cell);
-            }
-        }
-    }
-
-    private void createUI() {
-        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        this.timeLabel = new Label("Timer-----", skin);
-        this.timeLabel.setColor(Color.RED);
-        this.timeLabel.setScale(2);
-        this.timeLabel.setPosition(20, 280);
-        this.scoreLabel = new Label("Score-----", skin);
-        this.scoreLabel.setColor(Color.RED);
-        this.scoreLabel.setScale(2);
-        this.scoreLabel.setPosition(400, 280);
-        this.stage.addActor(timeLabel);
-        this.stage.addActor(scoreLabel);
-    }
-
-    /**
-     * Run dying countdown.
-     */
-    private void startTimer() {
-        new Thread(new Runnable() {
-            public void run() {
-                timeLabel.setText("Time till starvation: " + time + "s");
-                while (tOn == true) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    time = time - 1;
-                    if (time%12 == 0) {
-                        player.placeShoe();
-                    }
-                    if (time % 2 == 0 || score > 10) {
-                        player.createNew("cross");
-                    }
-                    if (score > 25) {
-                        player.createNew("cross");
-                    }
-                    if (score > 50) {
-                        player.createNew("cross");
-                    }
-                    if (score > 75) {
-                        player.createNew("cross");
-                    }
-                    if (score > 100) {
-                        player.createNew("cross");
-                    }
-                    timeLabel.setText("Time till starvation: " + time + "s");
-                    // }
-                }
-            }
-        }).start();
-    }
-
-    protected void gameOver() {
-        System.out.println("Game Over");
-        if (this.gameState != this.GAME_OVER) {
-
-            if (score > MySurvivalGame.getInstance().getHighscore()) {
-                MySurvivalGame.getInstance().setHighscore(score);
-                this.endLabel = new Label(
-                        "   Game Over\nClick for restart\n      Score: "
-                                + score + "\nNew Highscore", skin);
-            } else {
-                this.endLabel = new Label(
-                        "   Game Over\nClick for restart\n      Score: "
-                                + score + "\nCurrent Highscore: "
-                                + MySurvivalGame.getInstance().getHighscore(),
-                        skin);
-            }
-            this.endLabel.setColor(Color.RED);
-            this.endLabel.setScale(10);
-            this.endLabel.setPosition(230, 150);
-            this.stage.addActor(endLabel);
-            this.gameState = this.GAME_OVER;
-        }
+    private void prepareTexts() {
+        // manager.finishLoading();
+        System.out.println("test " + this.texts.size());
+        this.texts.add(new Texture(Gdx.files.internal("text/text1.png")));
+        System.out.println("test " + this.texts.size());
+        prepared = true;
     }
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        if (this.loading && LoadManager.getInstance().update()) {
+            System.out.println("1");
+            // TODO:
+            this.createUI();
+            prepareTexts();
+            this.loading = false;
+        }
+        if (this.loading) {
+            System.out.println("2");
+            return;
+        }
         if (time <= 0) {
             gameOver();
             tOn = false;
@@ -262,14 +169,163 @@ public class GameScreen implements Screen, InputProcessor {
         if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
             player.setRight();
         }
+        // System.out.println(manager.isLoaded("text/text1.png"));
+        // if (manager.isLoaded("text/text1.png")) {
+        // System.out.println("loaded");
+        // if (prepared) {
+        // }
+        // }
         this.stage.act(delta);
         this.stage.draw();
+        batch.begin();
+        final int length = 300;
+        final int height = 70;
+        batch.draw(this.texts.get(0), player.getX() - length / 2 + 16,
+                player.getY() + 40, length, height);
+        batch.end();
         // game.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         // game.font.setScale(5);
         // batch.begin();
         // game.font.draw(batch, "Time left: ", 100, 100);
         // batch.end();
         // game.font.draw(game.batch, "Time left: " + time + "s", 100, 100);
+    }
+
+    private void startMouseTimer() {
+        int minWait = 3;
+        int maxWait = 6;
+        final int ran = (int) (Math.random() * maxWait + minWait);
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(1000 * ran);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                createNewMouse();
+            }
+        }).start();
+    }
+
+    private void createNewMouse() {
+        mouse = new Mouse(map);
+        int ran = (int) (Math.random() * 42);
+        boolean horizontal = ran % 2 == 0;
+        boolean fromTop = (int) (Math.random() * 2) % 2 == 0;
+        Cell cell = new Cell();
+        // cell.setTile(tiles.get("mouse"));
+        // random rand position
+        if (horizontal) {
+            if (fromTop) {
+                mouse.setTilePostion(2, ran);
+                mouse.setDirection(Mouse.RIGHT);
+                System.out.println("mouse to right");
+                // l2.setCell(2, ran, cell);
+            } else {
+                mouse.setTilePostion(39, ran);
+                mouse.setDirection(Mouse.LEFT);
+                System.out.println("mouse to left");
+                // l2.setCell(40, ran, cell);
+            }
+        } else {
+            if (fromTop) {
+                mouse.setTilePostion(ran, 2);
+                mouse.setDirection(Mouse.UP);
+                System.out.println("mouse to up");
+                // l2.setCell(ran, 2, cell);
+            } else {
+                mouse.setTilePostion(ran, 39);
+                mouse.setDirection(Mouse.DOWN);
+                System.out.println("mouse to down");
+                // l2.setCell(ran, 40, cell);
+            }
+        }
+    }
+
+    private void createUI() {
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        this.timeLabel = new Label("Timer-----", skin);
+        this.timeLabel.setColor(Color.RED);
+        this.timeLabel.setScale(2);
+        this.timeLabel.setPosition(14, 286);
+        this.scoreLabel = new Label("Score-----", skin);
+        this.scoreLabel.setColor(Color.RED);
+        this.scoreLabel.setScale(3);
+        this.scoreLabel.setPosition(460, 286);
+        // if (manager.isLoaded("text\text1.png")) {
+        // System.out.println("loaded");
+        // text1 = manager.get("text\text1.png", Texture.class);
+        // }
+        this.stage.addActor(timeLabel);
+        this.stage.addActor(scoreLabel);
+    }
+
+    private void loadAssets() {
+        System.out.println("load assets");
+        manager.load("text/text1.png", Texture.class);
+    }
+
+    /**
+     * Run dying countdown.
+     */
+    private void startTimer() {
+        new Thread(new Runnable() {
+            public void run() {
+                timeLabel.setText("Time till starvation: " + time + "s");
+                while (tOn == true) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    time = time - 1;
+                    if (time % 12 == 0) {
+                        player.placeShoe();
+                    }
+                    if (time % 2 == 0 || score > 10) {
+                        player.createNew("cross");
+                    }
+                    if (score > 25) {
+                        player.createNew("cross");
+                    }
+                    if (score > 50) {
+                        player.createNew("cross");
+                    }
+                    if (score > 75) {
+                        player.createNew("cross");
+                    }
+                    if (score > 100) {
+                        player.createNew("cross");
+                    }
+                    timeLabel.setText("Time till starvation: " + time + "s");
+                    // }
+                }
+            }
+        }).start();
+    }
+
+    protected void gameOver() {
+        System.out.println("Game Over");
+        if (this.gameState != this.GAME_OVER) {
+
+            if (score > MySurvivalGame.getInstance().getHighscore()) {
+                MySurvivalGame.getInstance().setHighscore(score);
+                this.endLabel = new Label(
+                        "   Game Over\nClick for restart\n      Score: "
+                                + score + "\nNew Highscore", skin);
+            } else {
+                this.endLabel = new Label(
+                        "   Game Over\nClick for restart\n      Score: "
+                                + score + "\nCurrent Highscore: "
+                                + MySurvivalGame.getInstance().getHighscore(),
+                        skin);
+            }
+            this.endLabel.setColor(Color.RED);
+            this.endLabel.setScale(10);
+            this.endLabel.setPosition(230, 150);
+            this.stage.addActor(endLabel);
+            this.gameState = this.GAME_OVER;
+        }
     }
 
     @Override

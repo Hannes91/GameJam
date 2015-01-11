@@ -34,7 +34,7 @@ public class Player extends Entity {
             spritesLeft[i] = new TextureRegion(tex, i * width, 96, width,
                     height);
         }
-        animation.setFrames(spritesDown, 1 / 5f);
+        animation.setFrames(spritesRight, 1 / 5f);
     }
 
     @Override
