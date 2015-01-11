@@ -7,7 +7,7 @@ import de.jbazer.survivalgame.MySurvivalGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "My Survival Game";
+		config.title = "Cat's starvation";
         config.width = 1000;
         config.height = 600;
 		new LwjglApplication(new MySurvivalGame(), config);
