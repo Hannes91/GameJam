@@ -41,6 +41,7 @@ public class GameScreen implements Screen, InputProcessor {
     private int highscore;
     private boolean newHighscore;
     private Mouse mouse;
+    private Label scoreLabel;
     private static final int GAME_RUNNING = 0;
     private static final int GAME_OVER = 1;
 
@@ -70,7 +71,6 @@ public class GameScreen implements Screen, InputProcessor {
     private void startMouseTimer() {
         int minWait = 3;
         int maxWait = 6;
-        System.out.println("new mouse timer");
         final int ran = (int) (Math.random() * maxWait + minWait);
         new Thread(new Runnable() {
             public void run() {
@@ -96,24 +96,24 @@ public class GameScreen implements Screen, InputProcessor {
             if (fromTop) {
                 mouse.setTilePostion(2, ran);
                 mouse.setDirection(Mouse.RIGHT);
-                System.out.println("mouse ro right");
+                System.out.println("mouse to right");
                 // l2.setCell(2, ran, cell);
             } else {
                 mouse.setTilePostion(39, ran);
                 mouse.setDirection(Mouse.LEFT);
-                System.out.println("mouse ro left");
+                System.out.println("mouse to left");
                 // l2.setCell(40, ran, cell);
             }
         } else {
             if (fromTop) {
                 mouse.setTilePostion(ran, 2);
                 mouse.setDirection(Mouse.UP);
-                System.out.println("mouse ro up");
+                System.out.println("mouse to up");
                 // l2.setCell(ran, 2, cell);
             } else {
                 mouse.setTilePostion(ran, 39);
                 mouse.setDirection(Mouse.DOWN);
-                System.out.println("mouse ro down");
+                System.out.println("mouse to down");
                 // l2.setCell(ran, 40, cell);
             }
         }
@@ -125,7 +125,12 @@ public class GameScreen implements Screen, InputProcessor {
         this.timeLabel.setColor(Color.RED);
         this.timeLabel.setScale(2);
         this.timeLabel.setPosition(20, 280);
+        this.scoreLabel = new Label("Score-----", skin);
+        this.scoreLabel.setColor(Color.RED);
+        this.scoreLabel.setScale(2);
+        this.scoreLabel.setPosition(400, 280);
         this.stage.addActor(timeLabel);
+        this.stage.addActor(scoreLabel);
     }
 
     /**
@@ -134,27 +139,33 @@ public class GameScreen implements Screen, InputProcessor {
     private void startTimer() {
         new Thread(new Runnable() {
             public void run() {
-                timeLabel.setText("Time left: " + time);
+                timeLabel.setText("Time till starvation: " + time + "s");
                 while (tOn == true) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    // if (time <= 0) {
-                    // gameOver();
-                    // tOn = false;
-                    // }
-                    // else {
                     time = time - 1;
-                    score++;
-                    if (time % 2 == 0 || score > 60) {
+                    if (time%12 == 0) {
+                        player.placeShoe();
+                    }
+                    if (time % 2 == 0 || score > 10) {
                         player.createNew("cross");
                     }
-                    if (score > 120) {
+                    if (score > 25) {
                         player.createNew("cross");
                     }
-                    timeLabel.setText("Time left: " + time);
+                    if (score > 50) {
+                        player.createNew("cross");
+                    }
+                    if (score > 75) {
+                        player.createNew("cross");
+                    }
+                    if (score > 100) {
+                        player.createNew("cross");
+                    }
+                    timeLabel.setText("Time till starvation: " + time + "s");
                     // }
                 }
             }
@@ -191,22 +202,22 @@ public class GameScreen implements Screen, InputProcessor {
             gameOver();
             tOn = false;
         }
+        if (player.heal > 0 && gameState != this.GAME_OVER) {
+            score += player.heal;
+        }
+        scoreLabel.setText("Score: " + score);
         if (player.heal != 0) {
             this.time = this.time + player.heal;
             player.heal = 0;
-            timeLabel.setText("Time left: " + time);
+            timeLabel.setText("Time till starvation: " + time + "s");
         }
-        if (mouse != null)
-            System.out.println("Check Mouse catch. PlayerPos: " + player.getX()
-                    + ", " + player.getY() + "  Mouse: " + mouse.getX() + ", "
-                    + mouse.getY());
         if (mouse != null
                 && (int) player.getX() / 32 == (int) mouse.getX() / 32
                 && (int) player.getY() / 32 == (int) mouse.getY() / 32) {
             // Mouse catched
-            System.out.println("MOUSE CATCHED");
             mouse = null;
             startMouseTimer();
+            SoundManager.getInstance().playMiau();
             player.heal += 10;
         }
         if (mouse != null && mouse.stopped) {

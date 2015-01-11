@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.sun.webkit.ContextMenu.ShowContext;
 
 public class Entity {
 
@@ -33,8 +34,7 @@ public class Entity {
     protected int tileSize;
     protected Animation animation;
     private HashMap<String, TiledMapTile> tiles;
-    private ArrayList<TiledMapTile> tilesGround;
-    private ArrayList<TiledMapTile> tilesObjects;
+    private boolean[] shoeAlreadyInCorner = new boolean[4];
     /** Is set when player gets extra time through powerUps etc. */
     public int heal;
     private boolean mouseAlive;
@@ -58,9 +58,6 @@ public class Entity {
         tiles.put("shoe", map.getTileSets().getTile(7));
         tiles.put("flower", map.getTileSets().getTile(8));
         tiles.put("antifreeze", map.getTileSets().getTile(9));
-        if (this.equals(Mouse.class)) {
-            System.out.println("is Mouse");
-        }
     }
 
     /**
@@ -72,7 +69,32 @@ public class Entity {
         placeObstacleRandom();
         placeObstacleRandom();
         placeObstacleRandom();
+        placeObstacleRandom();
+        placeObstacleRandom();
+        placeObstacleRandom();
         createNew("antifreeze");
+        createNew("antifreeze");
+        placeShoe();
+    }
+
+    public void placeShoe() {
+        System.out.println("Place Shoe");
+        int ran = (int) (Math.random() * 4);
+        Cell cell = new Cell();
+        cell.setTile(tiles.get("shoe"));
+        if (ran == 0 && !shoeAlreadyInCorner[0]) {
+            shoeAlreadyInCorner[0] = true;
+            l2.setCell(1, 1, cell);
+        } else if (ran == 1 && !shoeAlreadyInCorner[1]) {
+            shoeAlreadyInCorner[1] = true;
+            l2.setCell(1, 40, cell);
+        } else if (ran == 2 && !shoeAlreadyInCorner[2]) {
+            shoeAlreadyInCorner[2] = true;
+            l2.setCell(40, 1, cell);
+        } else if (ran == 3 && !shoeAlreadyInCorner[3]) {
+            shoeAlreadyInCorner[3] = true;
+            l2.setCell(40, 40, cell);
+        }
     }
 
     /**
@@ -179,48 +201,60 @@ public class Entity {
         }
         int nextX = coltile;
         int nextY = rowtile;
-        if (up) nextY++;
-        if (down) nextY--;
-        if (left) nextX--;
-        if (right) nextX++;
+        if (up)
+            nextY++;
+        if (down)
+            nextY--;
+        if (left)
+            nextX--;
+        if (right)
+            nextX++;
         // If is an collectable
         if (l2 != null && l2.getCell(nextX, nextY) != null) {
             // if is a heal, heal stronger
             if (l2.getCell(nextX, nextY).getTile().getProperties()
                     .containsKey("heal")) {
                 if (isP) {
-                    heal += 6;
+                    heal += 5;
                     SoundManager.getInstance().playMiau();
                     // MySurvivalGame.getInstance().pickup();
                 }
                 createNew("goal");
-                createNew("flower");
-                createNew("cross");
+                l2.setCell(nextX, nextY, null);
+                // createNew("flower");
+                // createNew("cross");
+            }
+            if (l2.getCell(nextX, nextY) != null
+                    && l2.getCell(nextX, nextY).getTile().getProperties()
+                            .containsKey("die")) {
+                SoundManager.getInstance().playSound("dec");
+                startDying();
+                l2.setCell(nextX, nextY, null);
+                createNew("antifreeze");
+                createNew("antifreeze");
             }
             // Only when this is the player and not a mouse
             if (isP) {
-                if (l2.getCell(nextX, nextY).getTile().getProperties()
-                        .containsKey("small_heal")) {
+                if (l2.getCell(nextX, nextY) != null
+                        && l2.getCell(nextX, nextY).getTile().getProperties()
+                                .containsKey("small_heal")) {
                     SoundManager.getInstance().playSound("pickup");
                     heal += 1;
                 }
-                if (l2.getCell(nextX, nextY).getTile().getProperties()
-                        .containsKey("shoe")) {
+                if (l2.getCell(nextX, nextY) != null
+                        && l2.getCell(nextX, nextY).getTile().getProperties()
+                                .containsKey("shoe")) {
                     SoundManager.getInstance().playSound("pickup");
                     this.moveSpeed++;
                 }
-                if (l2.getCell(nextX, nextY).getTile().getProperties()
-                        .containsKey("decrease")) {
+                if (l2.getCell(nextX, nextY) != null
+                        && l2.getCell(nextX, nextY).getTile().getProperties()
+                                .containsKey("decrease")) {
                     SoundManager.getInstance().playSound("dec");
                     heal -= 3;
                 }
-                if (l2.getCell(nextX, nextY).getTile().getProperties()
-                        .containsKey("die")) {
-                    SoundManager.getInstance().playSound("dec");
-                    startDying();
-                }
+                l2.setCell(nextX, nextY, null);
             }
-            l2.setCell(nextX, nextY, null);
         }
         return true;
     }
@@ -334,6 +368,7 @@ public class Entity {
     }
 
     public void update(float dt) {
+        animation.update(dt);
         if (moving) {
             getNextPostion();
         }
@@ -342,13 +377,37 @@ public class Entity {
             rowtile = y / tileSize;
             coltile = x / tileSize;
         }
-        animation.update(dt);
     }
 
     public void draw(SpriteBatch sb) {
         sb.begin();
         sb.draw(animation.getFrames(), x, y, width, height);
         sb.end();
+    }
+
+    public void changeAntiFreezePos() {
+        for (int i = 0; i < 42; i++) {
+            for (int k = 0; k < 42; k++) {
+                if (l2.getCell(i, k) != null
+                        && l2.getCell(i, k).getTile().getProperties()
+                                .containsKey("die")) {
+                    System.out.println("found antifreeze");
+                    l2.setCell(i, k, null);
+                    this.createNew("antifreeze");
+                }
+            }
+        }
+    }
+
+    public boolean checkFull() {
+        for (int i = 0; i < 42; i++) {
+            for (int k = 0; k < 42; k++) {
+                if (l2.getCell(i, k) == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }
