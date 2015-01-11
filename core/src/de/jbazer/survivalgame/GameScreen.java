@@ -166,8 +166,12 @@ public class GameScreen implements Screen, InputProcessor {
             batch.begin();
             final int length = 300;
             final int height = 70;
-            batch.draw(this.texts.get(bubble.getActiveBubble() - 1), player.getX() - length / 2 + 16,
-                    player.getY() + 40, length, height);
+            Color c = batch.getColor();
+            batch.setColor(c.r, c.g, c.b, 0.8f);
+            batch.draw(this.texts.get(bubble.getActiveBubble() - 1),
+                    player.getX() - length / 2 + 16, player.getY() + 40,
+                    length, height);
+            batch.setColor(c.r, c.g, c.b, 1f);
             batch.end();
         }
         // game.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
